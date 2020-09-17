@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>BlazorDoom</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+
+<body>
+    <app>Loading...</app>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="renderutils.js"></script>
+    <script src="audioutils.js"></script>
+
+
+    <script>
+        const upKeys = [];
+        const downKeys = [];
+        let audioHelper;
+
+        document.body.addEventListener("keydown", function (e) {
+            const index = downKeys.indexOf(e.keyCode);
+            if (index < 0) {
+                downKeys.push(e.keyCode);
+            }
+            e.preventDefault();
+        });
+        document.body.addEventListener("keyup", function (e) {
+            const index = downKeys.indexOf(e.keyCode);
+            if (index > -1) {
+                downKeys.splice(index, 1);
+            }
+            upKeys.push(e.keyCode);
+            e.preventDefault();
+        });
+
+        const frameTime = 35;
+        let lastFrameTimestamp = -frameTime;
+
+        window.gameLoop = function (timestamp) {
+            if (timestamp - lastFrameTimestamp >= frameTime) {
+                lastFrameTimestamp = timestamp;
+                DotNet.invokeMethod('BlazorDoom', 'GameLoop', downKeys, upKeys);
+                upKeys.splice(0, upKeys.length);
+            }
+
+            window.requestAnimationFrame(window.gameLoop);
+        }
+
+        const sounds = new Map();
+
+        function playSound(samples, sampleRate, identifier, position) {
+            //console.log(position);
+            if (!audioHelper) {
+                return;
+            }
+            sounds.set(identifier, samples);
+            audioHelper.playByteArray(samples, sampleRate);
+        }
+
+        function playLoadedSound(identifier, sampleRate, position) {
+            if (!audioHelper) {
+                return;
+            }
+            const sound = sounds.get(identifier);
+            audioHelper.playByteArray(sound, sampleRate);
+        }
+
+        function initAudioHelper() {
+            if (!audioHelper) {
+                audioHelper = new AudioHelper();
+            }
+        }
+    </script>
+</body>
+
+</html>
