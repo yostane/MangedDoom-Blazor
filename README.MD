@@ -1,4 +1,6 @@
-# Manager Blazor doom
+# Manager doom Blazor
+
+![Logo](./media/logo.jpg)
 
 This is a quick port of Blazor Wasm port of [Managed Doom](https://github.com/sinshu/managed-doom)
 
