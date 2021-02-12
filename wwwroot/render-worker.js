@@ -1,13 +1,25 @@
-window.loadImageBytesIntoCanvas = (data, width, height) => {
+let canvas;
+
+onmessage = function(e){
+  const { screenData, colors, canvas: offscreenCanvas } = e.data;
+  if(offscreenCanvas){
+    canvas = offscreenCanvas; // canvas passed only once
+  } else {
+    renderWithColorsAndScreenDataUnmarshalled(screenData, colors, canvas)
+    postMessage("done!")
+  }
+}
+/*
+function loadImageBytesIntoCanvas(data, width, height) {
   console.time("canvas render");
   const canvas = document.getElementById("canvas");
-  var context = canvas.getContext("2d");
+  const context = canvas.getContext("2d");
   //console.log(data.length, width, height, canvas, context, data);
   const imageData = context.getImageData(0, 0, width, height);
   let x = 0;
   let y = 0;
-  var data = window.atob(data);
-  for (var i = 0; i < data.length; i += 4) {
+  data = window.atob(data);
+  for (let i = 0; i < data.length; i += 4) {
     imageData.data[y * (width * 4) + x] = data.charCodeAt(i);
     imageData.data[y * (width * 4) + x + 1] = data.charCodeAt(i + 1);
     imageData.data[y * (width * 4) + x + 2] = data.charCodeAt(i + 2);
@@ -21,24 +33,24 @@ window.loadImageBytesIntoCanvas = (data, width, height) => {
   }
   context.putImageData(imageData, 0, 0);
   console.timeEnd("canvas render");
-};
+}
 
-/*
+
 var screenData = screen.Data;
             var p = MemoryMarshal.Cast<byte, uint>(sfmlTextureData);
             for (var i = 0; i < p.Length; i++)
             {
                 p[i] = colors[screenData[i]];
             }
-*/
-window.renderWithColorsAndScreenData = (screenData, colors, width, height) => {
+
+function renderWithColorsAndScreenData(screenData, colors, width, height) {
   const canvas = document.getElementById("canvas");
-  var context = canvas.getContext("2d");
+  const context = canvas.getContext("2d");
   const imageData = context.getImageData(0, 0, width, height);
   let x = 0;
   let y = 0;
-  var screenData = window.atob(screenData);
-  for (var i = 0; i < width * height * 4; i += 4) {
+  screenData = window.atob(screenData);
+  for (let i = 0; i < width * height * 4; i += 4) {
     const color = colors[screenData.charCodeAt(i / 4)];
     imageData.data[y * (width * 4) + x] = color & 0xff;
     imageData.data[y * (width * 4) + x + 1] = (color >> 8) & 0xff;
@@ -51,20 +63,21 @@ window.renderWithColorsAndScreenData = (screenData, colors, width, height) => {
       y += 1;
     }
   }
-  context.putImageData(imageData, 0, 0);
+  return imageData
 };
+*/
 
-window.renderWithColorsAndScreenDataUnmarshalled = (screenData, colors) => {
+function renderWithColorsAndScreenDataUnmarshalled(screenData, colors) {
   //console.time("renderWithColorsAndScreenDataUnmarshalled js");
   const width = 320;
   const height = 200;
-  const canvas = document.getElementById("canvas");
-  var context = canvas.getContext("2d");
+  const context = canvas.getContext("2d")
   context.imageSmoothingEnabled = false;
   const imageData = context.createImageData(width, height);
   let x = 0;
   let y = 0;
-  for (var i = 0; i < (width * height) / 4; i += 1) {
+
+  for (let i = 0; i < (width * height) / 4; i += 1) {
     const screenDataItem = BINDING.mono_array_get(screenData, i);
     let dataIndex;
 
@@ -103,8 +116,7 @@ window.renderWithColorsAndScreenDataUnmarshalled = (screenData, colors) => {
     }
   }
   context.putImageData(imageData, 0, 0);
-  //console.timeEnd("renderWithColorsAndScreenDataUnmarshalled js");
-};
+}
 
 function setSinglePixel(imageData, dataIndex, colors, colorIndex) {
   const color = BINDING.mono_array_get(colors, colorIndex);
