@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.WebAssembly;
+using BlazorWorker.Core;
 
 namespace BlazorDoom
 {
@@ -22,6 +23,7 @@ namespace BlazorDoom
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddSingleton(serviceProvider => (IJSInProcessRuntime)serviceProvider.GetRequiredService<IJSRuntime>());
             builder.Services.AddSingleton(serviceProvider => (WebAssemblyJSRuntime)serviceProvider.GetRequiredService<IJSRuntime>());
+            builder.Services.AddWorkerFactory();
 
             await builder.Build().RunAsync();
         }

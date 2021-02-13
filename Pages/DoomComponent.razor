@@ -1,8 +1,12 @@
+@using BlazorWorker.Core
+@using BlazorWorker.BackgroundServiceFactory
+
 @page "/"
 @inject HttpClient Http
 @inject IJSRuntime jsRuntime
 @inject IJSInProcessRuntime jsProcessRuntime
 @inject WebAssemblyJSRuntime webAssemblyJSRuntime
+@inject IWorkerFactory workerFactory
 
 <label>WAD url (shareware wad used by default)</label>
 <input type="text" @bind="wadUrl" />
@@ -24,6 +28,8 @@
     private string[] args = { };
     private string[] configLines = { };
 
+    static IWorker worker;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await StartGame();
@@ -33,6 +39,10 @@
     {
         Console.WriteLine(wadUrl);
         app = null;
+        if (worker == null)
+        {
+            worker = await workerFactory.CreateAsync();
+        }
         var stream = await Http.GetStreamAsync(wadUrl);
         var commandLineArgs = new ManagedDoom.CommandLineArgs(args);
         app = new ManagedDoom.DoomApplication(commandLineArgs, configLines, Http,
@@ -48,7 +58,10 @@
             return;
         }
 
+
         //var watch = System.Diagnostics.Stopwatch.StartNew();
+        //var bgService = await worker.CreateBackgroundServiceAsync<ManagedDoom.DoomApplication>();
+        //await bgService.RunAsync(app => app.Run(downKeys, upKeys));
         app.Run(downKeys, upKeys);
         //watch.Stop();
         //Console.WriteLine($"fps {1000 / (float)(watch.ElapsedMilliseconds)}", );
