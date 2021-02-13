@@ -68,38 +68,16 @@ window.renderWithColorsAndScreenDataUnmarshalled = (screenData, colors) => {
     const screenDataItem = BINDING.mono_array_get(screenData, i);
     let dataIndex;
 
-    dataIndex = y * (width * 4) + x;
-    setSinglePixel(imageData, dataIndex, colors, screenDataItem & 0xff);
-    if (y >= height - 1) {
-      y = 0;
-      x += 4;
-    } else {
-      y += 1;
-    }
-    dataIndex = y * (width * 4) + x;
-
-    setSinglePixel(imageData, dataIndex, colors, (screenDataItem >> 8) & 0xff);
-    if (y >= height - 1) {
-      y = 0;
-      x += 4;
-    } else {
-      y += 1;
-    }
-    dataIndex = y * (width * 4) + x;
-    setSinglePixel(imageData, dataIndex, colors, (screenDataItem >> 16) & 0xff);
-    if (y >= height - 1) {
-      y = 0;
-      x += 4;
-    } else {
-      y += 1;
-    }
-    dataIndex = y * (width * 4) + x;
-    setSinglePixel(imageData, dataIndex, colors, (screenDataItem >> 24) & 0xff);
-    if (y >= height - 1) {
-      y = 0;
-      x += 4;
-    } else {
-      y += 1;
+    for (var mask = 0; mask <= 24; mask += 8) {
+      dataIndex = y * (width * 4) + x;
+      setSinglePixel(imageData, dataIndex, colors, (screenDataItem >> mask) & 0xff);
+      if (y >= height - 1) {
+        y = 0;
+        x += 4;
+      } else {
+        y += 1;
+      }
+      dataIndex = y * (width * 4) + x;
     }
   }
   context.putImageData(imageData, 0, 0);

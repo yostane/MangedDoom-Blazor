@@ -5,16 +5,14 @@
 @inject WebAssemblyJSRuntime webAssemblyJSRuntime
 
 <label>WAD url (shareware wad used by default)</label>
-<input type="text" value="@wadUrl" />
+<input type="text" @bind="wadUrl" />
 
 <button class="btn btn-secondary" @onclick="@StartGame">Start game</button>
 
-<canvas id="canvas"  Width="320" Height="320" style="width:100%; height:auto; image-rendering: pixelated;"></canvas>
+<canvas id="canvas" Width="320" Height="320" style="width:100%; height:auto; image-rendering: pixelated;"></canvas>
 
 
 @code {
-    protected override bool ShouldRender() => app == null;
-
     static ManagedDoom.DoomApplication app = null;
 
     private string wadUrl = "./doom1.wad";
@@ -33,11 +31,12 @@
 
     private async Task StartGame()
     {
+        Console.WriteLine(wadUrl);
         app = null;
         var stream = await Http.GetStreamAsync(wadUrl);
         var commandLineArgs = new ManagedDoom.CommandLineArgs(args);
         app = new ManagedDoom.DoomApplication(commandLineArgs, configLines, Http,
-         stream, jsRuntime, jsProcessRuntime, webAssemblyJSRuntime, wadUrl);
+            stream, jsRuntime, jsProcessRuntime, webAssemblyJSRuntime, wadUrl);
         jsProcessRuntime.InvokeVoid("gameLoop");
     }
 
@@ -48,14 +47,11 @@
         {
             return;
         }
+
         //var watch = System.Diagnostics.Stopwatch.StartNew();
         app.Run(downKeys, upKeys);
         //watch.Stop();
         //Console.WriteLine($"fps {1000 / (float)(watch.ElapsedMilliseconds)}", );
     }
 
-
 }
-
-
-        protected override Task

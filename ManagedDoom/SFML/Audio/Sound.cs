@@ -22,15 +22,9 @@ namespace SFML.Audio
 
         internal void Play()
         {
-            // Console.WriteLine($"Samples: {string.Join(" , ", SoundBuffer.samples)}");
-            //Console.WriteLine(this);
-            // DoomApplication.WebAssemblyJSRuntime.InvokeUnmarshalled<short[], uint, object, object>(
-            //     "playSamples", SoundBuffer.samples, SoundBuffer.sampleRate,
-            //     Position
-            //     );
+            var audioData = new object[] { SoundBuffer.samples, SoundBuffer.sampleRate, 0, Position };
             DoomApplication.WebAssemblyJSRuntime.Invoke<object>(
-                "playSound",
-                new object[] { SoundBuffer.samples, SoundBuffer.sampleRate, 0, Position });
+                "playSound", audioData);
 
         }
 
