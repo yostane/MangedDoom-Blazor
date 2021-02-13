@@ -6,11 +6,11 @@ This is a quick port of Blazor Wasm port of [Managed Doom](https://github.com/si
 
 You can try it here: [demo](https://yostane.github.io/MangedDoom-Blazor/)
 
-dotnet version used: 5.0.100-preview.8.20417.9
+dotnet version used is specified in [global.json](./global.json)
 
 ## Running the webapp locally
 
-Make sure you have installed dotnet 5 preview 8. Then run this command in this folder.
+Make sure you have installed dotnet 5 preview 8. Then, run this command in this folder.
 
 ```sh
 dotnet run --pathbase=/MangedDoom-Blazor
