@@ -8,6 +8,23 @@
     <base href="/MangedDoom-Blazor/" />
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="57x57" href="apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 </head>
 
 <body>
@@ -54,12 +71,17 @@
 
         const frameTime = 28;
         let lastFrameTimestamp = -frameTime;
+        const fpsElement = document.getElementById("fps");
+        const fpsSmoothing = 0.9;
+        var fpsMeasure = 0;
 
         window.gameLoop = function (timestamp) {
             const duration = timestamp - lastFrameTimestamp
             if (duration >= frameTime) {
-                const fpsElement = document.getElementById("fps");
-                fpsElement.innerHTML = `FPS: ${(1000 / duration).toFixed(2)}`;
+                // measure from https://stackoverflow.com/a/87333/13782429
+                const currentFps = 1000 / duration;
+                fpsMeasure = (fpsMeasure * fpsSmoothing) + (currentFps * (1 - fpsSmoothing));
+                fpsElement.innerHTML = `FPS: ${(1000 / duration).toFixed(0)}`;
                 lastFrameTimestamp = timestamp;
                 DotNet.invokeMethod('BlazorDoom', 'GameLoop', downKeys, upKeys);
                 upKeys.splice(0, upKeys.length);
@@ -91,6 +113,44 @@
             if (!audioHelper) {
                 audioHelper = new AudioHelper();
             }
+        }
+
+        // Check that service workers are supported
+        if ("serviceWorker" in navigator) {
+            // Use the window load event to keep the page load performant
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("./sw.js");
+            });
+            let deferredPrompt; // Allows to show the install prompt
+            const installButton = document.getElementById("install_button");
+
+            window.addEventListener("beforeinstallprompt", e => {
+                console.log("beforeinstallprompt fired");
+                // Prevent Chrome 76 and earlier from automatically showing a prompt
+                e.preventDefault();
+                // Stash the event so it can be triggered later.
+                deferredPrompt = e;
+                // Show the install button
+                installButton.hidden = false;
+                installButton.addEventListener("click", installApp);
+            });
+            function installApp() {
+                deferredPrompt.prompt();
+                installButton.disabled = true;
+                deferredPrompt.userChoice.then(choiceResult => {
+                    if (choiceResult.outcome === "accepted") {
+                        console.log("PWA setup accepted");
+                        installButton.hidden = true;
+                    } else {
+                        console.log("PWA setup rejected");
+                    }
+                    installButton.disabled = false;
+                    deferredPrompt = null;
+                });
+            }
+            window.addEventListener("appinstalled", evt => {
+                console.log("appinstalled fired", evt);
+            });
         }
     </script>
 </body>
