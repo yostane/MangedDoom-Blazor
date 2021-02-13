@@ -12,43 +12,54 @@
 
 <body>
     <app>Loading...</app>
-
+    <div id="fps"></div>
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
-    <script src="renderutils.js"></script>
-    <script src="audioutils.js"></script>
-
+    <script src="js/renderutils.js"></script>
+    <script src="js/audioutils.js"></script>
 
     <script>
         const upKeys = [];
         const downKeys = [];
         let audioHelper;
 
+
         document.body.addEventListener("keydown", function (e) {
+            if (e.target.tagName === "INPUT") {
+                return true;
+            }
             const index = downKeys.indexOf(e.keyCode);
             if (index < 0) {
                 downKeys.push(e.keyCode);
             }
             e.preventDefault();
+            return false;
         });
         document.body.addEventListener("keyup", function (e) {
+            if (e.target.tagName === "INPUT") {
+                return true;
+            }
             const index = downKeys.indexOf(e.keyCode);
             if (index > -1) {
                 downKeys.splice(index, 1);
             }
             upKeys.push(e.keyCode);
             e.preventDefault();
+            return false;
         });
 
         const frameTime = 35;
         let lastFrameTimestamp = -frameTime;
 
         window.gameLoop = function (timestamp) {
-            if (timestamp - lastFrameTimestamp >= frameTime) {
+            const duration = timestamp - lastFrameTimestamp
+            if (duration >= frameTime) {
+                const fpsElement = document.getElementById("fps");
+                fpsElement.innerHTML = `FPS: ${(1000 / duration).toFixed(2)}`;
                 lastFrameTimestamp = timestamp;
                 DotNet.invokeMethod('BlazorDoom', 'GameLoop', downKeys, upKeys);
                 upKeys.splice(0, upKeys.length);

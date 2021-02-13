@@ -4,3 +4,5 @@ start:
 	dotnet run --pathbase=/MangedDoom-Blazor
 restore:
 	dotnet restore 
+publish:
+	dotnet publish -c Release
