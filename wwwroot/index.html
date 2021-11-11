@@ -70,24 +70,26 @@
             return false;
         });
 
-        const frameTime = 28;
+        // frameTime = 1000 / fps
+        const frameTime = 1000 / 35;
         let lastFrameTimestamp = -frameTime;
         const fpsElement = document.getElementById("fps");
         const fpsSmoothing = 0.9;
         var fpsMeasure = 0;
 
         window.gameLoop = function (timestamp) {
-            const duration = timestamp - lastFrameTimestamp
+            const duration = timestamp - lastFrameTimestamp;
             if (duration >= frameTime) {
+                var startTime = performance.now()
                 // measure from https://stackoverflow.com/a/87333/13782429
                 const currentFps = 1000 / duration;
                 fpsMeasure = (fpsMeasure * fpsSmoothing) + (currentFps * (1 - fpsSmoothing));
-                fpsElement.innerHTML = `FPS: ${(1000 / duration).toFixed(0)}`;
                 lastFrameTimestamp = timestamp;
                 DotNet.invokeMethod('BlazorDoom', 'GameLoop', downKeys, upKeys);
                 upKeys.splice(0, upKeys.length);
+                var endTime = performance.now();
+                fpsElement.innerText = `${fpsMeasure.toFixed(0)} FPS - ${duration.toFixed(0)}ms - ${(endTime - startTime).toFixed(0)}ms`;
             }
-
             window.requestAnimationFrame(window.gameLoop);
         }
 
