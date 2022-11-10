@@ -77,7 +77,18 @@
         const fpsSmoothing = 0.9;
         var fpsMeasure = 0;
 
-        window.gameLoop = function (timestamp) {
+        export async function setMessage() {
+
+
+
+            document.getElementById("result").innerText =
+                    
+            }
+
+        window.gameLoop = async function (timestamp) {
+            const { getAssemblyExports } = await globalThis.getDotnetRuntime(0);
+            const exports = await getAssemblyExports("BlazorDoom.dll");
+
             const duration = timestamp - lastFrameTimestamp;
             if (duration >= frameTime) {
                 var startTime = performance.now()
@@ -85,6 +96,7 @@
                 const currentFps = 1000 / duration;
                 fpsMeasure = (fpsMeasure * fpsSmoothing) + (currentFps * (1 - fpsSmoothing));
                 lastFrameTimestamp = timestamp;
+                exports.BlazorSample.Pages.CallDotNet1.GetMessageFromDotnet();
                 DotNet.invokeMethod('BlazorDoom', 'GameLoop', downKeys, upKeys);
                 upKeys.splice(0, upKeys.length);
                 var endTime = performance.now();
