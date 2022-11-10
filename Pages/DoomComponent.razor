@@ -3,6 +3,7 @@
 @inject IJSRuntime jsRuntime
 @inject IJSInProcessRuntime jsProcessRuntime
 @inject WebAssemblyJSRuntime webAssemblyJSRuntime
+@using System.Runtime.InteropServices.JavaScript;
 
 <label>WAD url (shareware wad used by default)</label>
 <input type="text" @bind="wadUrl" />
@@ -36,11 +37,12 @@
         var stream = await Http.GetStreamAsync(wadUrl);
         var commandLineArgs = new ManagedDoom.CommandLineArgs(args);
         app = new ManagedDoom.DoomApplication(commandLineArgs, configLines, Http,
-            stream, jsRuntime, jsProcessRuntime, webAssemblyJSRuntime, wadUrl);
+        stream, jsRuntime, jsProcessRuntime, webAssemblyJSRuntime, wadUrl);
         jsProcessRuntime.InvokeVoid("gameLoop");
     }
 
     [JSInvokable("GameLoop")]
+    [JSExport]
     public static void GameLoop(uint[] downKeys, uint[] upKeys)
     {
         if (app == null)

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Net.Http;
-//
+﻿//
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2019-2020 Nobuaki Tanaka
 //
@@ -19,16 +17,18 @@ using System.Net.Http;
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.ExceptionServices;
-using SFML.Graphics;
-using SFML.Window;
-using ManagedDoom.SoftwareRendering;
-using ManagedDoom.Audio;
-using ManagedDoom.UserInput;
 using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
+using ManagedDoom.Audio;
+using ManagedDoom.SoftwareRendering;
+using ManagedDoom.UserInput;
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.WebAssembly;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace ManagedDoom
 {
@@ -39,7 +39,7 @@ namespace ManagedDoom
         public RenderWindow window { get; internal set; }
 
         private CommonResource resource;
-        private SfmlRenderer renderer;
+        public SfmlRenderer renderer;
         private SfmlSound sound;
         private SfmlMusic music;
         private SfmlUserInput userInput;
@@ -560,7 +560,6 @@ namespace ManagedDoom
             }
 
             options.Sound.Update();
-
             return UpdateResult.None;
         }
 
