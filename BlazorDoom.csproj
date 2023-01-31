@@ -1,19 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly" ToolsVersion="Current">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
         <ExcludeFoldersFromDeployment>docs</ExcludeFoldersFromDeployment>
-        <RunAOTCompilation>true</RunAOTCompilation>
-        <!-- https://learn.microsoft.com/en-us/aspnet/core/blazor/tooling?view=aspnetcore-7.0&pivots=windows#net-webassembly-build-tools-1 -->
-        <WasmEnableSIMD>true</WasmEnableSIMD>
-        <WasmEnableExceptionHandling>true</WasmEnableExceptionHandling>
+        <TargetFramework>net7.0</TargetFramework>
+        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+        <WasmMainJSPath>main.js</WasmMainJSPath>
+        <OutputType>Exe</OutputType>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>preview</LangVersion>
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>full</TrimMode>
+        <RunAOTCompilation>true</RunAOTCompilation>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.*-*" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.*-*" PrivateAssets="all" />
-        <PackageReference Include="System.Net.Http.Json" Version="7.*-*" />
+        <WasmExtraFilesToDeploy Include="index.html" />
+        <WasmExtraFilesToDeploy Include="*.js" />
+        <WasmExtraFilesToDeploy Include="*.css" />
     </ItemGroup>
+
     <ItemGroup>
         <Content Remove="docs\**" CopyToPublishDirectory="Never" />
     </ItemGroup>
+
 </Project>

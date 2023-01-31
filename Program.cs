@@ -1,29 +1,21 @@
 using System;
-using System.Net.Http;
-using System.Collections.Generic;
+using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
-using System.Text;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
-using Microsoft.JSInterop.WebAssembly;
 
 namespace BlazorDoom
 {
-    public class Program
+    public partial class MainJS
     {
-        public static async Task Main(string[] args)
+        static Controller? controller;
+
+        public static async Task Main()
         {
-            var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("app");
+            if (!OperatingSystem.IsBrowser())
+            {
+                throw new PlatformNotSupportedException("This demo is expected to run on browser platform");
+            }
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddSingleton(serviceProvider => (IJSInProcessRuntime)serviceProvider.GetRequiredService<IJSRuntime>());
-            builder.Services.AddSingleton(serviceProvider => (WebAssemblyJSRuntime)serviceProvider.GetRequiredService<IJSRuntime>());
-
-            await builder.Build().RunAsync();
+            Console.WriteLine("Ready!");
         }
     }
 }

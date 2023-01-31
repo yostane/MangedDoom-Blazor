@@ -1,19 +1,5 @@
-@page "/"
-@inject HttpClient Http
-@inject IJSRuntime jsRuntime
-@inject IJSInProcessRuntime jsProcessRuntime
-@inject WebAssemblyJSRuntime webAssemblyJSRuntime
-@using System.Runtime.InteropServices.JavaScript;
-
-<label>WAD url (shareware wad used by default)</label>
-<input type="text" @bind="wadUrl" />
-
-<button class="btn btn-secondary" @onclick="@StartGame">Start game</button>
-
-<canvas id="canvas" Width="320" Height="320" style="width:100%; height:auto; image-rendering: pixelated;"></canvas>
-
-
-@code {
+namespace BlazorDoom
+{
     static ManagedDoom.DoomApplication app = null;
 
     private string wadUrl = "./doom1.wad";
