@@ -21,12 +21,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
 using ManagedDoom.Audio;
 using ManagedDoom.SoftwareRendering;
 using ManagedDoom.UserInput;
-using Microsoft.JSInterop;
-using Microsoft.JSInterop.WebAssembly;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -77,22 +74,12 @@ namespace ManagedDoom
 
         public static HttpClient Http { get; internal set; }
         public static Stream WadStream { get; internal set; }
-        static public IJSRuntime JsRuntime
-        {
-            get; internal set;
-        }
-        public static IJSInProcessRuntime JSInProcessRuntime { get; internal set; }
-        public static WebAssemblyJSRuntime WebAssemblyJSRuntime { get; internal set; }
 
         public DoomApplication(CommandLineArgs args, String[] configLines, HttpClient http, Stream wadStream,
-            IJSRuntime jsRuntime, IJSInProcessRuntime jSInProcessRuntime, WebAssemblyJSRuntime webAssemblyJSRuntime,
             string wadUrl)
         {
             Http = http;
             WadStream = wadStream;
-            JsRuntime = jsRuntime;
-            JSInProcessRuntime = jSInProcessRuntime;
-            WebAssemblyJSRuntime = webAssemblyJSRuntime;
             configLines = new string[] {
                 "video_screenwidth=320",
                 "video_screenHeight=200",

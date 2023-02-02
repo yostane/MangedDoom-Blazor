@@ -1,45 +1,48 @@
+using System;
+using System.Net.Http;
+using System.Runtime.InteropServices.JavaScript;
+using System.Threading.Tasks;
+
 namespace BlazorDoom
 {
-    static ManagedDoom.DoomApplication app = null;
-
-    private string wadUrl = "./doom1.wad";
-
-    bool calledAfterRender = false;
-
-    static float framesPerSecond;
-
-    private string[] args = { };
-    private string[] configLines = { };
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    class BlazorDoom
     {
-        await StartGame();
-    }
+        static ManagedDoom.DoomApplication app = null;
 
-    private async Task StartGame()
-    {
-        Console.WriteLine(wadUrl);
-        app = null;
-        var stream = await Http.GetStreamAsync(wadUrl);
-        var commandLineArgs = new ManagedDoom.CommandLineArgs(args);
-        app = new ManagedDoom.DoomApplication(commandLineArgs, configLines, Http,
-        stream, jsRuntime, jsProcessRuntime, webAssemblyJSRuntime, wadUrl);
-        jsProcessRuntime.InvokeVoid("gameLoop");
-    }
+        private string wadUrl = "./doom1.wad";
 
-    [JSInvokable("GameLoop")]
-    [JSExport]
-    public static void GameLoop(uint[] downKeys, uint[] upKeys)
-    {
-        if (app == null)
+        bool calledAfterRender = false;
+
+        static float framesPerSecond;
+
+        private string[] args = { };
+        private string[] configLines = { };
+
+        private async Task StartGame()
         {
-            return;
+            var http = new HttpClient();
+            Console.WriteLine(wadUrl);
+            app = null;
+            var stream = await http.GetStreamAsync(wadUrl);
+            var commandLineArgs = new ManagedDoom.CommandLineArgs(args);
+            app = new ManagedDoom.DoomApplication(commandLineArgs, configLines, http, stream, wadUrl);
+            //jsProcessRuntime.InvokeVoid("gameLoop");
         }
 
-        //var watch = System.Diagnostics.Stopwatch.StartNew();
-        app.Run(downKeys, upKeys);
-        //watch.Stop();
-        //Console.WriteLine($"fps {1000 / (float)(watch.ElapsedMilliseconds)}", );
+        [JSExport]
+        public static void GameLoop(uint[] downKeys, uint[] upKeys)
+        {
+            if (app == null)
+            {
+                return;
+            }
+
+            //var watch = System.Diagnostics.Stopwatch.StartNew();
+            app.Run(downKeys, upKeys);
+            //watch.Stop();
+            //Console.WriteLine($"fps {1000 / (float)(watch.ElapsedMilliseconds)}", );
+        }
     }
+
 
 }
