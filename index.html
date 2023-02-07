@@ -7,11 +7,11 @@
             content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
         <title>BlazorDoom</title>
-        <base href="/MangedDoom-Blazor/" />
         <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
         <link href="css/app.css" rel="stylesheet" />
         <link rel="manifest" href="manifest.json" />
-
+        <script type="module" src="./main.js"></script>
+        <script type="module" src="./audioutils.js"></script>
         <link
             rel="preload"
             href="./mono-config.json"
@@ -36,8 +36,6 @@
             as="fetch"
             crossorigin="anonymous"
         />
-        <script src="js/renderutils.js"></script>
-        <script src="js/audioutils.js"></script>
     </head>
 
     <body>
@@ -58,7 +56,6 @@
             const upKeys = [];
             const downKeys = [];
             let audioHelper;
-
 
             document.body.addEventListener("keydown", function (e) {
                 if (e.target.tagName === "INPUT") {
@@ -91,33 +88,37 @@
             const fpsSmoothing = 0.9;
             var fpsMeasure = 0;
 
-            export async function setMessage() {
-
-
-
-                document.getElementById("result").innerText =
-
-                }
-
             window.gameLoop = async function (timestamp) {
-                const { getAssemblyExports } = await globalThis.getDotnetRuntime(0);
+                const { getAssemblyExports } =
+                    await globalThis.getDotnetRuntime(0);
                 const exports = await getAssemblyExports("BlazorDoom.dll");
 
                 const duration = timestamp - lastFrameTimestamp;
                 if (duration >= frameTime) {
-                    var startTime = performance.now()
+                    var startTime = performance.now();
                     // measure from https://stackoverflow.com/a/87333/13782429
                     const currentFps = 1000 / duration;
-                    fpsMeasure = (fpsMeasure * fpsSmoothing) + (currentFps * (1 - fpsSmoothing));
+                    fpsMeasure =
+                        fpsMeasure * fpsSmoothing +
+                        currentFps * (1 - fpsSmoothing);
                     lastFrameTimestamp = timestamp;
                     exports.BlazorSample.Pages.CallDotNet1.GetMessageFromDotnet();
-                    DotNet.invokeMethod('BlazorDoom', 'GameLoop', downKeys, upKeys);
+                    DotNet.invokeMethod(
+                        "BlazorDoom",
+                        "GameLoop",
+                        downKeys,
+                        upKeys
+                    );
                     upKeys.splice(0, upKeys.length);
                     var endTime = performance.now();
-                    fpsElement.innerText = `${fpsMeasure.toFixed(0)} FPS - ${duration.toFixed(0)}ms - ${(endTime - startTime).toFixed(0)}ms`;
+                    fpsElement.innerText = `${fpsMeasure.toFixed(
+                        0
+                    )} FPS - ${duration.toFixed(0)}ms - ${(
+                        endTime - startTime
+                    ).toFixed(0)}ms`;
                 }
                 window.requestAnimationFrame(window.gameLoop);
-            }
+            };
 
             const sounds = new Map();
 
@@ -142,44 +143,6 @@
                 if (!audioHelper) {
                     audioHelper = new AudioHelper();
                 }
-            }
-
-            // Check that service workers are supported
-            if ("serviceWorker" in navigator) {
-                // Use the window load event to keep the page load performant
-                window.addEventListener("load", () => {
-                    navigator.serviceWorker.register("./sw.js");
-                });
-                let deferredPrompt; // Allows to show the install prompt
-                const installButton = document.getElementById("install_button");
-
-                window.addEventListener("beforeinstallprompt", e => {
-                    console.log("beforeinstallprompt fired");
-                    // Prevent Chrome 76 and earlier from automatically showing a prompt
-                    e.preventDefault();
-                    // Stash the event so it can be triggered later.
-                    deferredPrompt = e;
-                    // Show the install button
-                    installButton.hidden = false;
-                    installButton.addEventListener("click", installApp);
-                });
-                function installApp() {
-                    deferredPrompt.prompt();
-                    installButton.disabled = true;
-                    deferredPrompt.userChoice.then(choiceResult => {
-                        if (choiceResult.outcome === "accepted") {
-                            console.log("PWA setup accepted");
-                            installButton.hidden = true;
-                        } else {
-                            console.log("PWA setup rejected");
-                        }
-                        installButton.disabled = false;
-                        deferredPrompt = null;
-                    });
-                }
-                window.addEventListener("appinstalled", evt => {
-                    console.log("appinstalled fired", evt);
-                });
             }
         </script>
     </body>

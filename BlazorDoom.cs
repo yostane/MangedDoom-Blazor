@@ -1,13 +1,15 @@
 using System;
 using System.Net.Http;
 using System.Runtime.InteropServices.JavaScript;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 
 namespace BlazorDoom
 {
-    class BlazorDoom
+    // Must be named MainJS
+    public partial class MainJS
     {
-        static ManagedDoom.DoomApplication app = null;
+        static ManagedDoom.DoomApplication? app = null;
 
         private string wadUrl = "./doom1.wad";
 
@@ -30,7 +32,7 @@ namespace BlazorDoom
         }
 
         [JSExport]
-        public static void GameLoop(uint[] downKeys, uint[] upKeys)
+        public static void GameLoop(int[] downKeys, int[] upKeys)
         {
             if (app == null)
             {
@@ -42,7 +44,25 @@ namespace BlazorDoom
             //watch.Stop();
             //Console.WriteLine($"fps {1000 / (float)(watch.ElapsedMilliseconds)}", );
         }
+
+        public static async Task Main()
+        {
+            if (!OperatingSystem.IsBrowser())
+            {
+                throw new PlatformNotSupportedException("This demo is expected to run on browser platform");
+            }
+
+            Console.WriteLine("Importing!");
+            await JSHost.ImportAsync("BlazorDoom/renderutils.js", "renderutils.js");
+            Console.WriteLine("Ready!");
+        }
     }
+}
 
-
+// declare the JS signature
+[SupportedOSPlatform("browser")]
+public partial class RenderUtils
+{
+    [JSImport("renderWithColorsAndScreenDataUnmarshalled", "BlazorDoom/renderutils.js")]
+    internal static partial string renderOnJS(byte[] screenData, int[] colors);
 }

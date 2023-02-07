@@ -250,7 +250,7 @@ namespace ManagedDoom
             }
         }
 
-        public void Run(uint[] downKeys, uint[] upKeys)
+        public void Run(int[] downKeys, int[] upKeys)
         {
             // var watch = System.Diagnostics.Stopwatch.StartNew();
 

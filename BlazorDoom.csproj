@@ -11,11 +11,14 @@
         <TrimMode>full</TrimMode>
         <RunAOTCompilation>true</RunAOTCompilation>
         <Nullable>enable</Nullable>
+        <WarningLevel>0</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
         <WasmExtraFilesToDeploy Include="index.html" />
         <WasmExtraFilesToDeploy Include="*.js" />
+        <WasmExtraFilesToDeploy Include="./css/*.css" />
         <WasmExtraFilesToDeploy Include="*.css" />
+        <WasmExtraFilesToDeploy Include="*.json" />
     </ItemGroup>
 
     <ItemGroup>

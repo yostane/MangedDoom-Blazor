@@ -1,3 +1,38 @@
+export function renderWithColorsAndScreenDataUnmarshalled(screenData, colors) {
+    //console.time("renderWithColorsAndScreenDataUnmarshalled js");
+    const width = 320;
+    const height = 200;
+    const canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false;
+    const imageData = context.createImageData(width, height);
+    let x = 0;
+    let y = 0;
+    for (var i = 0; i < (width * height) / 4; i += 1) {
+        const screenDataItem = MONO.getU32(screenData + i * 4);
+        let dataIndex;
+
+        for (var mask = 0; mask <= 24; mask += 8) {
+            dataIndex = y * (width * 4) + x;
+            setSinglePixel(
+                imageData,
+                dataIndex,
+                colors,
+                (screenDataItem >> mask) & 0xff
+            );
+            if (y >= height - 1) {
+                y = 0;
+                x += 4;
+            } else {
+                y += 1;
+            }
+            dataIndex = y * (width * 4) + x;
+        }
+    }
+    context.putImageData(imageData, 0, 0);
+    //console.timeEnd("renderWithColorsAndScreenDataUnmarshalled js");
+}
+
 window.loadImageBytesIntoCanvas = (data, width, height) => {
     console.time("canvas render");
     const canvas = document.getElementById("canvas");
@@ -52,41 +87,6 @@ window.renderWithColorsAndScreenData = (screenData, colors, width, height) => {
         }
     }
     context.putImageData(imageData, 0, 0);
-};
-
-window.renderWithColorsAndScreenDataUnmarshalled = (screenData, colors) => {
-    //console.time("renderWithColorsAndScreenDataUnmarshalled js");
-    const width = 320;
-    const height = 200;
-    const canvas = document.getElementById("canvas");
-    var context = canvas.getContext("2d");
-    context.imageSmoothingEnabled = false;
-    const imageData = context.createImageData(width, height);
-    let x = 0;
-    let y = 0;
-    for (var i = 0; i < (width * height) / 4; i += 1) {
-        const screenDataItem = MONO.getU32(screenData + i * 4);
-        let dataIndex;
-
-        for (var mask = 0; mask <= 24; mask += 8) {
-            dataIndex = y * (width * 4) + x;
-            setSinglePixel(
-                imageData,
-                dataIndex,
-                colors,
-                (screenDataItem >> mask) & 0xff
-            );
-            if (y >= height - 1) {
-                y = 0;
-                x += 4;
-            } else {
-                y += 1;
-            }
-            dataIndex = y * (width * 4) + x;
-        }
-    }
-    context.putImageData(imageData, 0, 0);
-    //console.timeEnd("renderWithColorsAndScreenDataUnmarshalled js");
 };
 
 function setSinglePixel(imageData, dataIndex, colors, colorIndex) {

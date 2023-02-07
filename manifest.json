@@ -3,8 +3,8 @@
     "theme_color": "#2196f3",
     "background_color": "#2196f3",
     "display": "standalone",
-    "Scope": "/MangedDoom-Blazor/",
-    "start_url": "/MangedDoom-Blazor/",
+    // "Scope": "/MangedDoom-Blazor/",
+    // "start_url": "/MangedDoom-Blazor/",
     "icons": [
         {
             "src": "favicon/android-icon-36x36.png",

@@ -16,13 +16,12 @@
 
 
 using System;
-using System.ComponentModel;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
 using SFML.Graphics;
 using SFML.System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ManagedDoom.SoftwareRendering
 {
@@ -325,8 +324,10 @@ namespace ManagedDoom.SoftwareRendering
         {
             // var watch = System.Diagnostics.Stopwatch.StartNew();
             var args = new object[] { screen.Data, colors, 320, 200 };
-            Console.WriteLine($"Colors : {String.Join(",", colors)}.\nScreen data: {BitConverter.ToString(screen.Data)}.");
-            DoomApplication.WebAssemblyJSRuntime.InvokeUnmarshalled<byte[], uint[], int>("renderWithColorsAndScreenDataUnmarshalled", screen.Data, colors);
+            //Console.WriteLine($"Colors : {String.Join(",", colors)}.\nScreen data: {BitConverter.ToString(screen.Data)}.");
+            RenderUtils.renderOnJS(screen.Data, (int[])((object)colors));
+
+            //DoomApplication.WebAssemblyJSRuntime.InvokeUnmarshalled<byte[], uint[], int>("renderWithColorsAndScreenDataUnmarshalled", screen.Data, colors);
             //Console.WriteLine("JS renderWithColorsAndScreenDataUnmarshalled: {0} s", watch.ElapsedMilliseconds);
             // watch.Restart();
 
