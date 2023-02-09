@@ -325,7 +325,7 @@ namespace ManagedDoom.SoftwareRendering
             // var watch = System.Diagnostics.Stopwatch.StartNew();
             var args = new object[] { screen.Data, colors, 320, 200 };
             //Console.WriteLine($"Colors : {String.Join(",", colors)}.\nScreen data: {BitConverter.ToString(screen.Data)}.");
-            RenderUtils.renderOnJS(screen.Data, (int[])((object)colors));
+            BlazorDoom.Renderer.renderOnJS(screen.Data, (int[])((object)colors));
 
             //DoomApplication.WebAssemblyJSRuntime.InvokeUnmarshalled<byte[], uint[], int>("renderWithColorsAndScreenDataUnmarshalled", screen.Data, colors);
             //Console.WriteLine("JS renderWithColorsAndScreenDataUnmarshalled: {0} s", watch.ElapsedMilliseconds);

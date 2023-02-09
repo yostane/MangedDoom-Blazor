@@ -16,9 +16,9 @@
     <ItemGroup>
         <WasmExtraFilesToDeploy Include="index.html" />
         <WasmExtraFilesToDeploy Include="*.js" />
-        <WasmExtraFilesToDeploy Include="./css/*.css" />
         <WasmExtraFilesToDeploy Include="*.css" />
         <WasmExtraFilesToDeploy Include="*.json" />
+        <WasmExtraFilesToDeploy Include="*.wad" />
     </ItemGroup>
 
     <ItemGroup>

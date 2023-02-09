@@ -11,26 +11,6 @@ namespace BlazorDoom
     {
         static ManagedDoom.DoomApplication? app = null;
 
-        private string wadUrl = "./doom1.wad";
-
-        bool calledAfterRender = false;
-
-        static float framesPerSecond;
-
-        private string[] args = { };
-        private string[] configLines = { };
-
-        private async Task StartGame()
-        {
-            var http = new HttpClient();
-            Console.WriteLine(wadUrl);
-            app = null;
-            var stream = await http.GetStreamAsync(wadUrl);
-            var commandLineArgs = new ManagedDoom.CommandLineArgs(args);
-            app = new ManagedDoom.DoomApplication(commandLineArgs, configLines, http, stream, wadUrl);
-            //jsProcessRuntime.InvokeVoid("gameLoop");
-        }
-
         [JSExport]
         public static void GameLoop(int[] downKeys, int[] upKeys)
         {
@@ -38,7 +18,6 @@ namespace BlazorDoom
             {
                 return;
             }
-
             //var watch = System.Diagnostics.Stopwatch.StartNew();
             app.Run(downKeys, upKeys);
             //watch.Stop();
@@ -53,16 +32,20 @@ namespace BlazorDoom
             }
 
             Console.WriteLine("Importing!");
-            await JSHost.ImportAsync("BlazorDoom/renderutils.js", "renderutils.js");
+            await JSHost.ImportAsync("blazorDoom/renderer.js", "./renderer.js");
+
+
+            string wadUrl = "http://localhost:51501/doom1.wad";
+            string[] args = { };
+            string[] configLines = { };
+            var http = new HttpClient();
+            //jsProcessRuntime.InvokeVoid("gameLoop");
+            Console.WriteLine(wadUrl);
+            var stream = await http.GetStreamAsync(wadUrl);
+            var commandLineArgs = new ManagedDoom.CommandLineArgs(args);
+            app = new ManagedDoom.DoomApplication(commandLineArgs, configLines, http, stream, wadUrl);
+
             Console.WriteLine("Ready!");
         }
     }
-}
-
-// declare the JS signature
-[SupportedOSPlatform("browser")]
-public partial class RenderUtils
-{
-    [JSImport("renderWithColorsAndScreenDataUnmarshalled", "BlazorDoom/renderutils.js")]
-    internal static partial string renderOnJS(byte[] screenData, int[] colors);
 }

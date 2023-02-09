@@ -1,5 +1,5 @@
 watch:
-	dotnet watch run --pathbase=/MangedDoom-Blazor
+	dotnet watch run
 start:
 	dotnet run
 start_release:
