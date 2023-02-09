@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {number[]} screenData: byte array
+ * @param {number[]} colors: unit array
+ */
 export function renderWithColorsAndScreenDataUnmarshalled(screenData, colors) {
     //console.time("renderWithColorsAndScreenDataUnmarshalled js");
     const width = 320;
@@ -8,10 +13,10 @@ export function renderWithColorsAndScreenDataUnmarshalled(screenData, colors) {
     const imageData = context.createImageData(width, height);
     let y = 0;
     let x = 0;
-    for (let i = 0; i < width * height; i += 1) {
+    for (let i = 0; i < screenData.length; i += 1) {
         const dataIndex = (y * width + x) * 4;
         setSinglePixel(imageData, dataIndex, colors, screenData[i]);
-        if (y > height) {
+        if (y >= height - 1) {
             y = 0;
             x += 1;
         } else {
@@ -19,10 +24,11 @@ export function renderWithColorsAndScreenDataUnmarshalled(screenData, colors) {
         }
     }
     context.putImageData(imageData, 0, 0);
+
     //console.timeEnd("renderWithColorsAndScreenDataUnmarshalled js");
 }
 
-export function setSinglePixel(imageData, dataIndex, colors, colorIndex) {
+function setSinglePixel(imageData, dataIndex, colors, colorIndex) {
     const color = colors[colorIndex];
     imageData.data[dataIndex] = color & 0xff;
     imageData.data[dataIndex + 1] = (color >> 8) & 0xff;

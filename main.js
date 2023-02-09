@@ -19,35 +19,6 @@ const fpsElement = document.getElementById("fps");
 const fpsSmoothing = 0.9;
 var fpsMeasure = 0;
 
-const upKeys = [];
-const downKeys = [];
-
-window.addEventListener("DOMContentLoaded", () => {
-    document.body.addEventListener("keydown", function (e) {
-        if (e.target.tagName === "INPUT") {
-            return true;
-        }
-        const index = downKeys.indexOf(e.keyCode);
-        if (index < 0) {
-            downKeys.push(e.keyCode);
-        }
-        e.preventDefault();
-        return false;
-    });
-    document.body.addEventListener("keyup", function (e) {
-        if (e.target.tagName === "INPUT") {
-            return true;
-        }
-        const index = downKeys.indexOf(e.keyCode);
-        if (index > -1) {
-            downKeys.splice(index, 1);
-        }
-        upKeys.push(e.keyCode);
-        e.preventDefault();
-        return false;
-    });
-});
-
 async function gameLoop(timestamp) {
     const duration = timestamp - lastFrameTimestamp;
     if (duration >= frameTime) {
