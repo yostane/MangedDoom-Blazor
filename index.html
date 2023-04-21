@@ -1,84 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-        <title>BlazorDoom</title>
-        <link href="bootstrap.min.css" rel="stylesheet" />
-        <link href="app.css" rel="stylesheet" />
-        <link rel="manifest" href="manifest.json" />
 
-        <script>
-            const upKeys = [];
-            const downKeys = [];
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>BlazorDoom</title>
+    <link href="bootstrap.min.css" rel="stylesheet" />
+    <link href="app.css" rel="stylesheet" />
+    <link rel="manifest" href="manifest.json" />
 
-            window.addEventListener("DOMContentLoaded", () => {
-                document.body.addEventListener("keydown", function (e) {
-                    if (e.target.tagName === "INPUT") {
-                        return true;
-                    }
-                    const index = downKeys.indexOf(e.keyCode);
-                    if (index < 0) {
-                        downKeys.push(e.keyCode);
-                    }
-                    e.preventDefault();
-                    return false;
-                });
-                document.body.addEventListener("keyup", function (e) {
-                    if (e.target.tagName === "INPUT") {
-                        return true;
-                    }
-                    const index = downKeys.indexOf(e.keyCode);
-                    if (index > -1) {
-                        downKeys.splice(index, 1);
-                    }
-                    upKeys.push(e.keyCode);
-                    e.preventDefault();
-                    return false;
-                });
+    <script>
+        const upKeys = [];
+        const downKeys = [];
+
+        window.addEventListener("DOMContentLoaded", () => {
+            document.body.addEventListener("keydown", function (e) {
+                if (e.target.tagName === "INPUT") {
+                    return true;
+                }
+                const index = downKeys.indexOf(e.keyCode);
+                if (index < 0) {
+                    downKeys.push(e.keyCode);
+                }
+                e.preventDefault();
+                return false;
             });
-        </script>
+            document.body.addEventListener("keyup", function (e) {
+                if (e.target.tagName === "INPUT") {
+                    return true;
+                }
+                const index = downKeys.indexOf(e.keyCode);
+                if (index > -1) {
+                    downKeys.splice(index, 1);
+                }
+                upKeys.push(e.keyCode);
+                e.preventDefault();
+                return false;
+            });
+        });
+    </script>
 
-        <script type="module" src="./audioutils.js"></script>
-        <script type="module" src="./main.js"></script>
-        <script type="module" src="./dotnet.js"></script>
-        <link
-            rel="preload"
-            href="./mono-config.json"
-            as="fetch"
-            crossorigin="anonymous"
-        />
-        <link
-            rel="prefetch"
-            href="./dotnet.wasm"
-            as="fetch"
-            crossorigin="anonymous"
-        />
-        <link
-            rel="prefetch"
-            href="./icudt.dat"
-            as="fetch"
-            crossorigin="anonymous"
-        />
-        <link
-            rel="prefetch"
-            href="./managed/System.Private.CoreLib.dll"
-            as="fetch"
-            crossorigin="anonymous"
-        />
-    </head>
+    <script type="module" src="./audioutils.js"></script>
+    <script type="module" src="./main.js"></script>
+    <script type="module" src="./dotnet.js"></script>
+    <link rel="preload" href="./mono-config.json" as="fetch" crossorigin="anonymous" />
+    <link rel="prefetch" href="./dotnet.wasm" as="fetch" crossorigin="anonymous" />
+    <link rel="prefetch" href="./icudt.dat" as="fetch" crossorigin="anonymous" />
+    <link rel="prefetch" href="./managed/System.Private.CoreLib.dll" as="fetch" crossorigin="anonymous" />
+</head>
 
-    <body>
-        <div id="install_button" style="visibility: hidden"></div>
-        <div id="fps"></div>
-        <canvas
-            id="canvas"
-            width="320"
-            height="320"
-            style="width: 100%; height: auto; image-rendering: pixelated"
-        ></canvas>
-    </body>
+<body>
+    <div id="install_button" style="visibility: hidden"></div>
+    <div id="fps"></div>
+    <canvas id="canvas" width="320" height="200" style="width: 80%; height: auto; image-rendering: pixelated"></canvas>
+</body>
+
 </html>

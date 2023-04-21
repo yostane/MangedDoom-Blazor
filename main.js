@@ -13,6 +13,7 @@ await dotnet.run();
 let audioHelper;
 
 // frameTime = 1000 / fps
+// 60 fps -> 1 frame in 16.66 ms
 const frameTime = 1000 / 35;
 let lastFrameTimestamp = -frameTime;
 const fpsElement = document.getElementById("fps");
@@ -21,14 +22,14 @@ var fpsMeasure = 0;
 
 async function gameLoop(timestamp) {
     const duration = timestamp - lastFrameTimestamp;
-    if (duration >= frameTime) {
+    if (true) {
         var startTime = performance.now();
         // measure from https://stackoverflow.com/a/87333/13782429
         const currentFps = 1000 / duration;
         fpsMeasure =
             fpsMeasure * fpsSmoothing + currentFps * (1 - fpsSmoothing);
         lastFrameTimestamp = timestamp;
-        exports.BlazorDoom.MainJS.GameLoop(upKeys, downKeys);
+        exports.BlazorDoom.MainJS.GameLoop(downKeys, upKeys);
         upKeys.splice(0, upKeys.length);
         var endTime = performance.now();
         fpsElement.innerText = `${fpsMeasure.toFixed(

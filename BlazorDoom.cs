@@ -35,7 +35,7 @@ namespace BlazorDoom
             await JSHost.ImportAsync("blazorDoom/renderer.js", "./renderer.js");
 
 
-            string wadUrl = "http://127.0.0.1:9000/doom1.wad";
+            string wadUrl = "http://localhost:5000/doom1.wad";
             string[] args = { };
             string[] configLines = { };
             var http = new HttpClient();

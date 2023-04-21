@@ -84,6 +84,7 @@
                 fpsMeasure = (fpsMeasure * fpsSmoothing) + (currentFps * (1 - fpsSmoothing));
                 fpsElement.innerHTML = `FPS: ${(1000 / duration).toFixed(0)}`;
                 lastFrameTimestamp = timestamp;
+                console.log(`down keys`, downKeys);
                 DotNet.invokeMethod('BlazorDoom', 'GameLoop', downKeys, upKeys);
                 upKeys.splice(0, upKeys.length);
             }
