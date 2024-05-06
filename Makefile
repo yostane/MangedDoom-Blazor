@@ -3,9 +3,9 @@ watch:
 start:
 	dotnet run
 start_release:
-	dotnet run --pathbase=/MangedDoom-Blazor -c Release
+	dotnet run -c Release
 watch_release:
-	dotnet watch run --pathbase=/MangedDoom-Blazor -c Release
+	dotnet watch run -c Release
 restore:
 	dotnet restore 
 publish:
