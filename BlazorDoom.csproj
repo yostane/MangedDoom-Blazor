@@ -1,25 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
     <PropertyGroup>
         <ExcludeFoldersFromDeployment>docs</ExcludeFoldersFromDeployment>
-        <TargetFramework>net7.0</TargetFramework>
-        <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
-        <WasmMainJSPath>main.js</WasmMainJSPath>
-        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <LangVersion>preview</LangVersion>
-        <PublishTrimmed>true</PublishTrimmed>
-        <TrimMode>full</TrimMode>
-        <RunAOTCompilation>true</RunAOTCompilation>
         <Nullable>enable</Nullable>
         <WarningLevel>0</WarningLevel>
     </PropertyGroup>
-    <ItemGroup>
-        <WasmExtraFilesToDeploy Include="index.html" />
-        <WasmExtraFilesToDeploy Include="*.js" />
-        <WasmExtraFilesToDeploy Include="*.css" />
-        <WasmExtraFilesToDeploy Include="*.json" />
-        <WasmExtraFilesToDeploy Include="*.wad" />
-    </ItemGroup>
 
     <ItemGroup>
         <Content Remove="docs\**" CopyToPublishDirectory="Never" />
