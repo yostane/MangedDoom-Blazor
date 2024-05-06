@@ -28,7 +28,7 @@ async function gameLoop(timestamp) {
         fpsMeasure =
             fpsMeasure * fpsSmoothing + currentFps * (1 - fpsSmoothing);
         lastFrameTimestamp = timestamp;
-        exports.BlazorDoom.MainJS.GameLoop(upKeys, downKeys);
+        exports.BlazorDoom.MainJS.GameLoop(downKeys, upKeys);
         upKeys.splice(0, upKeys.length);
         var endTime = performance.now();
         fpsElement.innerText = `${fpsMeasure.toFixed(
