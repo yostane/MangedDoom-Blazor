@@ -11,5 +11,9 @@ namespace BlazorDoom
     {
         [JSImport("renderWithColorsAndScreenDataUnmarshalled", "blazorDoom/renderer.js")]
         internal static partial string renderOnJS(byte[] screenData, int[] colors);
+
+
+        [JSImport("playSound", "blazorDoom/renderer.js")]
+        internal static partial string playSoundOnJS(int[] samples, int sampleRate);
     }
 }

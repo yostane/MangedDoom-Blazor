@@ -10,8 +10,6 @@ const exports = await getAssemblyExports(getConfig().mainAssemblyName);
 console.log("1");
 await dotnet.run();
 
-let audioHelper;
-
 // frameTime = 1000 / fps
 // 60 fps -> 1 frame in 16.66 ms
 const frameTime = 1000 / 35;
@@ -22,7 +20,7 @@ var fpsMeasure = 0;
 
 async function gameLoop(timestamp) {
     const duration = timestamp - lastFrameTimestamp;
-    if (true) {
+    if (duration >= frameTime) {
         var startTime = performance.now();
         // measure from https://stackoverflow.com/a/87333/13782429
         const currentFps = 1000 / duration;
@@ -39,31 +37,6 @@ async function gameLoop(timestamp) {
         )}ms`;
     }
     requestAnimationFrame(gameLoop);
-}
-
-const sounds = new Map();
-
-function playSound(samples, sampleRate, identifier, position) {
-    //console.log(position);
-    if (!audioHelper) {
-        return;
-    }
-    sounds.set(identifier, samples);
-    audioHelper.playByteArray(samples, sampleRate);
-}
-
-function playLoadedSound(identifier, sampleRate, position) {
-    if (!audioHelper) {
-        return;
-    }
-    const sound = sounds.get(identifier);
-    audioHelper.playByteArray(sound, sampleRate);
-}
-
-function initAudioHelper() {
-    if (!audioHelper) {
-        audioHelper = new AudioHelper();
-    }
 }
 
 gameLoop(0);
