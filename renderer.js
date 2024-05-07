@@ -37,25 +37,27 @@ function setSinglePixel(imageData, dataIndex, colors, colorIndex) {
     imageData.data[dataIndex + 3] = 255;
 }
 
+let audioContext;
+
 export function playSound(samples, sampleRate) {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    this.context = new AudioContext({
+    audioContext = new AudioContext({
         sampleRate: sampleRate,
     });
     const length = samples.length;
-
-    const audioBuffer = this.context.createBuffer(
+    const audioBuffer = audioContext.createBuffer(
         1,
         length,
-        this.context.sampleRate
+        sampleRate
     );
+
     var channelData = audioBuffer.getChannelData(0);
-    for (let i = 0; i < length; i += 2) {
+    for (let i = 0; i < length; i++) {
+        // noralize the sample to be between -1 and 1
         channelData[i] = samples[i] / 0xffff;
     }
 
-    var source = this.context.createBufferSource();
+    var source = audioContext.createBufferSource();
     source.buffer = audioBuffer;
-    source.connect(this.context.destination);
+    source.connect(audioContext.destination);
     source.start();
 }
