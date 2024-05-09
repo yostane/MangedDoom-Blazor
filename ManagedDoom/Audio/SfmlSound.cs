@@ -262,7 +262,7 @@ namespace ManagedDoom.Audio
                     channel.SoundBuffer = buffers[(int)info.Reserved];
                     SetParam(channel, info);
                     channel.Pitch = GetPitch(info.Type, info.Reserved);
-                    channel.Play();
+                    channel.Play(i);
                     info.Playing = info.Reserved;
                     info.Reserved = Sfx.NONE;
                 }

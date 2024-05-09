@@ -38,19 +38,23 @@ function setSinglePixel(imageData, dataIndex, colors, colorIndex) {
 }
 
 let audioContext;
+const numberOfChannels = 8;
+export function playSound(samples, sampleRate, channel) {
+    if (!audioContext) {
+        console.log("creating audio context", numberOfChannels, sampleRate);
+        audioContext = new AudioContext({
+            numberOfChannels: numberOfChannels,
+            sampleRate: sampleRate,
+        });
+    }
 
-export function playSound(samples, sampleRate) {
-    audioContext = new AudioContext({
-        sampleRate: sampleRate,
-    });
-    const length = samples.length;
     const audioBuffer = audioContext.createBuffer(
-        1,
-        length,
+        numberOfChannels,
+        samples.length,
         sampleRate
     );
 
-    var channelData = audioBuffer.getChannelData(0);
+    var channelData = audioBuffer.getChannelData(channel);
     for (let i = 0; i < length; i++) {
         // noralize the sample to be between -1 and 1
         channelData[i] = samples[i] / 0xffff;
@@ -60,4 +64,38 @@ export function playSound(samples, sampleRate) {
     source.buffer = audioBuffer;
     source.connect(audioContext.destination);
     source.start();
+}
+
+let musicBuffer;
+export function playMusic(samples, sampleRate, channel) {
+    // if (!audioContext) {
+    //     try {
+    //         audioContext = new AudioContext({
+    //             numberOfChannels: numberOfChannels,
+    //             sampleRate: sampleRate,
+    //         });
+    //     } catch (e) {
+    //         console.error(e);
+    //         return;
+    //     }
+    // }
+
+    // if (!musicBuffer) {
+    //     musicBuffer = audioContext.createBuffer(
+    //         8,
+    //         samples.length,
+    //         sampleRate
+    //     );
+    // }
+
+    // var channelData = musicBuffer.getChannelData(channel);
+    // for (let i = 0; i < length; i++) {
+    //     // noralize the sample to be between -1 and 1
+    //     channelData[i] = samples[i] / 0xffff;
+    // }
+
+    // var source = audioContext.createBufferSource();
+    // source.buffer = musicBuffer;
+    // source.connect(audioContext.destination);
+    // source.start();
 }

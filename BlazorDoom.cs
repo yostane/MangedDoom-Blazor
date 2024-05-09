@@ -36,13 +36,16 @@ namespace BlazorDoom
 
 
             string wadUrl = "http://localhost:5000/doom1.wad";
+            string soundFontUrl = "http://localhost:5000/TimGM6mb.sf2";
             string[] args = { };
             string[] configLines = { };
             var http = new HttpClient();
             //jsProcessRuntime.InvokeVoid("gameLoop");
             Console.WriteLine(wadUrl);
             var stream = await http.GetStreamAsync(wadUrl);
+            var soundFontStream = await http.GetStreamAsync(soundFontUrl);
             var commandLineArgs = new ManagedDoom.CommandLineArgs(args);
+            ManagedDoom.DoomApplication.SoundFontStream = soundFontStream;
             app = new ManagedDoom.DoomApplication(commandLineArgs, configLines, http, stream, wadUrl);
 
             Console.WriteLine("Ready!");

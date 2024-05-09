@@ -117,6 +117,7 @@ namespace ManagedDoom
 
                 if (!args.nosound.Present && !args.nomusic.Present)
                 {
+                    Console.WriteLine("Getting GetSfmlMusicInstance instance");
                     music = ConfigUtilities.GetSfmlMusicInstance(config, resource.Wad);
                 }
 
@@ -546,6 +547,8 @@ namespace ManagedDoom
                 renderer.Render(this);
             }
 
+            //Console.WriteLine(options.Music);
+            options.Music.CustomAdvanceFrame();
             options.Sound.Update();
             return UpdateResult.None;
         }
@@ -653,5 +656,7 @@ namespace ManagedDoom
         public DoomGame Game => game;
         public DoomMenu Menu => menu;
         public string QuitMessage => quitMessage;
+
+        public static Stream SoundFontStream { get; internal set; }
     }
 }

@@ -115,6 +115,11 @@ namespace ManagedDoom.Audio
             }
         }
 
+        public void CustomAdvanceFrame()
+        {
+            this.stream.OnGetData(out short[] samples);
+        }
+
         public int MaxVolume
         {
             get
@@ -191,10 +196,10 @@ namespace ManagedDoom.Audio
 
             private void Play()
             {
-                // TODO: implement
+
             }
 
-            protected bool OnGetData(out short[] samples)
+            public bool OnGetData(out short[] samples)
             {
                 if (reserved != current)
                 {
@@ -233,6 +238,8 @@ namespace ManagedDoom.Audio
                 }
 
                 samples = batch;
+                int[] intSamples = Array.ConvertAll(batch, Convert.ToInt32);
+                BlazorDoom.Renderer.playMusicOnJS(intSamples, MusDecoder.SampleRate, 0);
 
                 return true;
             }

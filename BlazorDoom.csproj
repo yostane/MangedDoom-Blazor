@@ -19,6 +19,7 @@
         <WasmExtraFilesToDeploy Include="*.css" />
         <WasmExtraFilesToDeploy Include="*.json" />
         <WasmExtraFilesToDeploy Include="*.wad" />
+        <WasmExtraFilesToDeploy Include="*.sf2" />
     </ItemGroup>
 
     <ItemGroup>

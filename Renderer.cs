@@ -14,6 +14,9 @@ namespace BlazorDoom
 
 
         [JSImport("playSound", "blazorDoom/renderer.js")]
-        internal static partial string playSoundOnJS(int[] samples, int sampleRate);
+        internal static partial string playSoundOnJS(int[] samples, int sampleRate, int channel);
+
+        [JSImport("playMusic", "blazorDoom/renderer.js")]
+        internal static partial string playMusicOnJS(int[] samples, int sampleRate, int channel);
     }
 }
