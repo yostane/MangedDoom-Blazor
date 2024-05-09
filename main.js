@@ -12,7 +12,7 @@ await dotnet.run();
 
 // frameTime = 1000 / fps
 // 60 fps -> 1 frame in 16.66 ms
-const frameTime = 1000 / 35;
+const frameTime = 1000 / 30;
 let lastFrameTimestamp = -frameTime;
 const fpsElement = document.getElementById("fps");
 const fpsSmoothing = 0.9;
@@ -20,7 +20,7 @@ var fpsMeasure = 0;
 
 async function gameLoop(timestamp) {
     const duration = timestamp - lastFrameTimestamp;
-    if (duration >= frameTime) {
+    if (true) {
         var startTime = performance.now();
         // measure from https://stackoverflow.com/a/87333/13782429
         const currentFps = 1000 / duration;
