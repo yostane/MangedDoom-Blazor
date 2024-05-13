@@ -548,10 +548,19 @@ namespace ManagedDoom
             }
 
             //Console.WriteLine(options.Music);
+            if (musicFrameCount % 2 == 0)
+            {
+                //tweak to accelerate music
+                options.Music.CustomAdvanceFrame();
+                musicFrameCount = 0;
+            }
+            musicFrameCount++;
             options.Music.CustomAdvanceFrame();
             options.Sound.Update();
             return UpdateResult.None;
         }
+
+        static int musicFrameCount = 0;
 
         private void StartWipe()
         {

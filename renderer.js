@@ -39,14 +39,12 @@ function setSinglePixel(imageData, dataIndex, colors, colorIndex) {
 
 let audioContext;
 const numberOfChannels = 8;
-let musicBuffer;
-
+let soundSource;
 export function playSound(samples, sampleRate, channel) {
     if (!audioContext) {
         console.log("creating audio context", numberOfChannels, sampleRate);
         audioContext = new AudioContext({
-            numberOfChannels: numberOfChannels,
-            sampleRate: sampleRate,
+            numberOfChannels: numberOfChannels
         });
     }
 
@@ -58,22 +56,28 @@ export function playSound(samples, sampleRate, channel) {
 
     var channelData = audioBuffer.getChannelData(channel);
     for (let i = 0; i < samples.length; i++) {
-        // noralize the sample to be between -1 and 1
+        // normalize the sample to be between -1 and 1
         channelData[i] = samples[i] / 32767;
     }
 
-    var source = audioContext.createBufferSource();
-    source.buffer = audioBuffer;
-    source.connect(audioContext.destination);
-    source.start();
+    // if (soundSource) {
+    //     soundSource.stop();
+    // }
+
+    soundSource = audioContext.createBufferSource();
+    soundSource.buffer = audioBuffer;
+    soundSource.connect(audioContext.destination);
+    soundSource.start();
 }
 
+let source;
+let musicChannelData;
+let musicBuffer;
 export function playMusic(samples, sampleRate, channel) {
     if (!audioContext) {
         try {
             audioContext = new AudioContext({
-                numberOfChannels: numberOfChannels,
-                sampleRate: sampleRate,
+                numberOfChannels: numberOfChannels
             });
         } catch (e) {
             console.error(e);
@@ -87,15 +91,22 @@ export function playMusic(samples, sampleRate, channel) {
             samples.length,
             sampleRate
         );
-    }
-    var channelData = musicBuffer.getChannelData(0);
-    for (let i = 0; i < samples.length; i++) {
-        // noralize the sample to be between -1 and 1
-        channelData[i] = samples[i] / 32767;
+        musicChannelData = musicBuffer.getChannelData(0);
     }
 
-    var source = audioContext.createBufferSource();
+
+    if (source) {
+        source.stop();
+    }
+    source = audioContext.createBufferSource();
     source.buffer = musicBuffer;
     source.connect(audioContext.destination);
+
+
+    for (let i = 0; i < samples.length; i++) {
+        // noralize the sample to be between -1 and 1
+        musicChannelData[i] = samples[i] / 32767;
+    }
+
     source.start();
 }
