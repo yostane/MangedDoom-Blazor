@@ -70,6 +70,7 @@ export function playSound(samples, sampleRate, channel) {
     soundSource.start();
 }
 
+// Todo: play music in bigger and sync the playback
 let source;
 let musicChannelData;
 let musicBuffer;
