@@ -1,4 +1,4 @@
-# Manager doom Blazor
+# Managed doom Blazor
 
 ![Logo](./media/logo.jpg)
 
