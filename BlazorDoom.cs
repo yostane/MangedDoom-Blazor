@@ -11,6 +11,7 @@ namespace BlazorDoom
     {
         static ManagedDoom.DoomApplication? app = null;
 
+
         [JSExport]
         public static void GameLoop(int[] downKeys, int[] upKeys)
         {
@@ -24,19 +25,20 @@ namespace BlazorDoom
             //Console.WriteLine($"fps {1000 / (float)(watch.ElapsedMilliseconds)}", );
         }
 
+        [JSImport("getBaseUrl", "main.js")]
+        public static partial string getBaseUrl();
+
         public static async Task Main()
         {
+
             if (!OperatingSystem.IsBrowser())
             {
                 throw new PlatformNotSupportedException("This demo is expected to run on browser platform");
             }
 
-            Console.WriteLine("Importing!");
-            await JSHost.ImportAsync("blazorDoom/renderer.js", "./renderer.js");
-
-
-            string wadUrl = "http://localhost:5000/doom1.wad";
-            string soundFontUrl = "http://localhost:5000/TimGM6mb.sf2";
+            Console.WriteLine("Loading assets");
+            string wadUrl = $"{getBaseUrl()}/doom1.wad";
+            string soundFontUrl = $"{getBaseUrl()}/TimGM6mb.sf2";
             // string soundFontUrl = "http://localhost:5000/Roland_SC-55_v3.7.sf2";
             string[] args = { };
             string[] configLines = { };

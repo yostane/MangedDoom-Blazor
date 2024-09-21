@@ -1,14 +1,32 @@
-import { dotnet } from "./dotnet.js";
+import { dotnet } from "./_framework/dotnet.js";
+import {
+    renderWithColorsAndScreenDataUnmarshalled,
+    playSound,
+    playMusic,
+} from "./renderer.js";
 
 // Launches the c# main
 console.log("2");
-const { getAssemblyExports, getConfig } = await dotnet.create();
+const { setModuleImports, getAssemblyExports, getConfig, runMain } =
+    await dotnet.withApplicationArguments("start").create();
+
+setModuleImports("blazorDoom/renderer.js", {
+    renderWithColorsAndScreenDataUnmarshalled,
+    playMusic,
+    playSound,
+});
+
+setModuleImports("main.js", {
+    getBaseUrl: () => window.location.href,
+});
 
 console.log("3");
 const exports = await getAssemblyExports(getConfig().mainAssemblyName);
 
 console.log("1");
-await dotnet.run();
+
+// run the C# Main() method and keep the runtime process running and executing further API calls
+await runMain();
 
 // frameTime = 33 or 16
 // 60 fps -> 1 frame in 16.66 ms
