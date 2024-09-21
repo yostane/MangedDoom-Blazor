@@ -10,3 +10,5 @@ restore:
 	dotnet restore 
 publish:
 	dotnet publish -c Release
+custom_profile:
+    dotnet run -c Release --launch-profile "BlazorDoom"  --verbosity normal

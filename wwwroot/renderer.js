@@ -4,7 +4,6 @@
  * @param {number[]} colors: unit array
  */
 export function renderWithColorsAndScreenDataUnmarshalled(screenData, colors) {
-    //console.time("renderWithColorsAndScreenDataUnmarshalled js");
     const width = 320;
     const height = 200;
     const canvas = document.getElementById("canvas");
@@ -25,8 +24,6 @@ export function renderWithColorsAndScreenDataUnmarshalled(screenData, colors) {
         }
     }
     context.putImageData(imageData, 0, 0);
-
-    //console.timeEnd("renderWithColorsAndScreenDataUnmarshalled js");
 }
 
 function setSinglePixel(imageData, dataIndex, colors, colorIndex) {
@@ -44,7 +41,7 @@ export function playSound(samples, sampleRate, channel) {
     if (!audioContext) {
         console.log("creating audio context", numberOfChannels, sampleRate);
         audioContext = new AudioContext({
-            numberOfChannels: numberOfChannels
+            numberOfChannels: numberOfChannels,
         });
     }
 
@@ -78,7 +75,7 @@ export function playMusic(samples, sampleRate, channel) {
     if (!audioContext) {
         try {
             audioContext = new AudioContext({
-                numberOfChannels: numberOfChannels
+                numberOfChannels: numberOfChannels,
             });
         } catch (e) {
             console.error(e);
@@ -87,14 +84,9 @@ export function playMusic(samples, sampleRate, channel) {
     }
 
     if (!musicBuffer) {
-        musicBuffer = audioContext.createBuffer(
-            1,
-            samples.length,
-            sampleRate
-        );
+        musicBuffer = audioContext.createBuffer(1, samples.length, sampleRate);
         musicChannelData = musicBuffer.getChannelData(0);
     }
-
 
     if (source) {
         source.stop();
@@ -102,7 +94,6 @@ export function playMusic(samples, sampleRate, channel) {
     source = audioContext.createBufferSource();
     source.buffer = musicBuffer;
     source.connect(audioContext.destination);
-
 
     for (let i = 0; i < samples.length; i++) {
         // noralize the sample to be between -1 and 1
