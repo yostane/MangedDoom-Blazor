@@ -11,6 +11,9 @@ obj/
 /node_modules
 /wwwroot/node_modules
 
+*.pem
+*.key
+
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore
 
 

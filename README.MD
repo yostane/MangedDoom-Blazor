@@ -8,25 +8,25 @@ You can try it here: [demo](https://yostane.github.io/MangedDoom-Blazor/)
 
 ## Running the webapp locally
 
--   Dotnet version used is specified in [global.json](./global.json)
--   Run this command in this folder.
+- Dotnet version used is specified in [global.json](./global.json)
+- Run this command in this folder.
 
 ```sh
 dotnet run --pathbase=/MangedDoom-Blazor
 ```
 
--   Then, open this link in your browser: [http://localhost:5000/MangedDoom-Blazor/](http://localhost:5000/MangedDoom-Blazor/)
--   If you encounter a `System.Globalization.CultureNotFoundException`, try to set the DOTNET_SYSTEM_GLOBALIZATION_INVARIANT to 0.
-    -   PowerShell: `$Env:DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = 0`
-    -   cmd: `set DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0`
+- Then, open this link in your browser: [http://localhost:5000/MangedDoom-Blazor/](http://localhost:5000/MangedDoom-Blazor/)
+- If you encounter a `System.Globalization.CultureNotFoundException`, try to set the DOTNET_SYSTEM_GLOBALIZATION_INVARIANT to 0.
+  - PowerShell: `$Env:DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = 0`
+  - cmd: `set DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0`
 
 ## TODO
 
--   Update to stable version dotnet 5 (when available)
--   Optimize sound: cache sound samples in JS side
--   Implement mouse controls
--   Implement save and load
--   Fix bugs
+- Update to stable version dotnet 5 (when available)
+- Optimize sound: cache sound samples in JS side
+- Implement mouse controls
+- Implement save and load
+- Fix bugs
 
 ## Common issues
 
@@ -45,4 +45,14 @@ en-US is an invalid culture identifier.
    at Microsoft.Build.CommandLine.MSBuildApp.Execute(String[] commandLine)
    at Microsoft.Build.CommandLine.MSBuildApp.Main(String[] args)
    at Microsoft.DotNet.Cli.Utils.MSBuildForwardingAppWithoutLogging.ExecuteInProc(String[] arguments)
+```
+
+## Userful scripts
+
+```pwsh
+# List all relative files (for pwa)
+Get-ChildItem -Recurse  -File -Name | % { '"./' + ($_ -replace '[\\/]', '/') + '",' }
+Get-ChildItem -Recurse  -File -Name -Exclude *.br,*.gz  | % { '"./' + ($_ -replace '[\\/]', '/') + '",' }
+
+dotnet tool install --global dotnet-serve
 ```
