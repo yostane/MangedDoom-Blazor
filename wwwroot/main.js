@@ -6,7 +6,7 @@ import {
 } from "./renderer.js";
 
 // Launches the c# main
-console.log("2");
+console.log("Initializing dotnet from JS");
 const { setModuleImports, getAssemblyExports, getConfig, runMain } =
     await dotnet.withApplicationArguments("start").create();
 
@@ -20,13 +20,23 @@ setModuleImports("main.js", {
     getBaseUrl: () => window.location.href,
 });
 
-console.log("3");
+console.log("Getting exporteddotnet functions");
 const exports = await getAssemblyExports(getConfig().mainAssemblyName);
 
-console.log("1");
-
 // run the C# Main() method and keep the runtime process running and executing further API calls
+console.log("Runnong C# Main");
 await runMain();
+
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+        .register("service-worker.js")
+        .then((registration) => {
+            console.log("Service Worker registered:", registration);
+        })
+        .catch((error) => {
+            console.error("Service Worker registration failed:", error);
+        });
+}
 
 // frameTime = 33 or 16
 // 60 fps -> 1 frame in 16.66 ms
@@ -35,6 +45,8 @@ let lastFrameTimestamp = -frameTime;
 const fpsElement = document.getElementById("fps");
 const fpsSmoothing = 0.9;
 var fpsMeasure = 0;
+const upKeys = [];
+const downKeys = [];
 
 async function gameLoop(timestamp) {
     const duration = timestamp - lastFrameTimestamp;
@@ -59,4 +71,28 @@ async function gameLoop(timestamp) {
 
 gameLoop(0);
 
-console.log("done");
+console.log("Game loop started");
+
+document.body.addEventListener("keydown", function (e) {
+    if (e.target.tagName === "INPUT") {
+        return true;
+    }
+    const index = downKeys.indexOf(e.keyCode);
+    if (index < 0) {
+        downKeys.push(e.keyCode);
+    }
+    e.preventDefault();
+    return false;
+});
+document.body.addEventListener("keyup", function (e) {
+    if (e.target.tagName === "INPUT") {
+        return true;
+    }
+    const index = downKeys.indexOf(e.keyCode);
+    if (index > -1) {
+        downKeys.splice(index, 1);
+    }
+    upKeys.push(e.keyCode);
+    e.preventDefault();
+    return false;
+});
