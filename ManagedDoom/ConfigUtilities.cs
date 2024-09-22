@@ -36,17 +36,18 @@ namespace ManagedDoom
 
         public static SfmlMusic GetSfmlMusicInstance(Config config, Wad wad)
         {
-            return null;
-            // TODO: load music
-            /*var sfPath = Path.Combine(GetExeDirectory(), "TimGM6mb.sf2");
-            if (File.Exists(sfPath))
+            var sfPath = "http://localhost:5000/TimGM6mb.sf2";
+            // if (File.Exists(sfPath))
+            if (true)
             {
+                Console.WriteLine("SoundFont found.");
                 return new SfmlMusic(config, wad, sfPath);
             }
             else
             {
+                Console.WriteLine("SoundFont not found. Please put TimGM6mb.sf2 in the root directory.");
                 return null;
-            }*/
+            }
         }
     }
 }

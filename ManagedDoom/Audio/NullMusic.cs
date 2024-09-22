@@ -37,6 +37,11 @@ namespace ManagedDoom.Audio
         {
         }
 
+        public void CustomAdvanceFrame()
+        {
+            //throw new NotImplementedException();
+        }
+
         public int MaxVolume
         {
             get

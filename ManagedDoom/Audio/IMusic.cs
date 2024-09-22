@@ -25,5 +25,7 @@ namespace ManagedDoom.Audio
 
         public int MaxVolume { get; }
         public int Volume { get; set; }
+
+        public void CustomAdvanceFrame();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Net.Http;
-//
+﻿//
 // Copyright (C) 1993-1996 Id Software, Inc.
 // Copyright (C) 2019-2020 Nobuaki Tanaka
 //
@@ -19,16 +17,15 @@ using System.Net.Http;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Runtime.ExceptionServices;
+using ManagedDoom.Audio;
+using ManagedDoom.SoftwareRendering;
+using ManagedDoom.UserInput;
 using SFML.Graphics;
 using SFML.Window;
-using ManagedDoom.SoftwareRendering;
-using ManagedDoom.Audio;
-using ManagedDoom.UserInput;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.JSInterop;
-using Microsoft.JSInterop.WebAssembly;
 
 namespace ManagedDoom
 {
@@ -39,7 +36,7 @@ namespace ManagedDoom
         public RenderWindow window { get; internal set; }
 
         private CommonResource resource;
-        private SfmlRenderer renderer;
+        public SfmlRenderer renderer;
         private SfmlSound sound;
         private SfmlMusic music;
         private SfmlUserInput userInput;
@@ -77,22 +74,12 @@ namespace ManagedDoom
 
         public static HttpClient Http { get; internal set; }
         public static Stream WadStream { get; internal set; }
-        static public IJSRuntime JsRuntime
-        {
-            get; internal set;
-        }
-        public static IJSInProcessRuntime JSInProcessRuntime { get; internal set; }
-        public static WebAssemblyJSRuntime WebAssemblyJSRuntime { get; internal set; }
 
         public DoomApplication(CommandLineArgs args, String[] configLines, HttpClient http, Stream wadStream,
-            IJSRuntime jsRuntime, IJSInProcessRuntime jSInProcessRuntime, WebAssemblyJSRuntime webAssemblyJSRuntime,
             string wadUrl)
         {
             Http = http;
             WadStream = wadStream;
-            JsRuntime = jsRuntime;
-            JSInProcessRuntime = jSInProcessRuntime;
-            WebAssemblyJSRuntime = webAssemblyJSRuntime;
             configLines = new string[] {
                 "video_screenwidth=320",
                 "video_screenHeight=200",
@@ -130,6 +117,7 @@ namespace ManagedDoom
 
                 if (!args.nosound.Present && !args.nomusic.Present)
                 {
+                    Console.WriteLine("Getting GetSfmlMusicInstance instance");
                     music = ConfigUtilities.GetSfmlMusicInstance(config, resource.Wad);
                 }
 
@@ -263,7 +251,7 @@ namespace ManagedDoom
             }
         }
 
-        public void Run(uint[] downKeys, uint[] upKeys)
+        public void Run(int[] downKeys, int[] upKeys)
         {
             // var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -559,10 +547,20 @@ namespace ManagedDoom
                 renderer.Render(this);
             }
 
+            //Console.WriteLine(options.Music);
+            if (musicFrameCount % 2 == 0)
+            {
+                //tweak to accelerate music
+                options.Music.CustomAdvanceFrame();
+                musicFrameCount = 0;
+            }
+            musicFrameCount++;
+            options.Music.CustomAdvanceFrame();
             options.Sound.Update();
-
             return UpdateResult.None;
         }
+
+        static int musicFrameCount = 0;
 
         private void StartWipe()
         {
@@ -667,5 +665,7 @@ namespace ManagedDoom
         public DoomGame Game => game;
         public DoomMenu Menu => menu;
         public string QuitMessage => quitMessage;
+
+        public static Stream SoundFontStream { get; internal set; }
     }
 }

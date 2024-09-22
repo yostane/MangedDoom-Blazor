@@ -1,4 +1,4 @@
-
+.vscode/
 # Created by https://www.toptal.com/developers/gitignore/api/dotnetcore
 # Edit at https://www.toptal.com/developers/gitignore?templates=dotnetcore
 
@@ -10,6 +10,9 @@ obj/
 # Common node modules locations
 /node_modules
 /wwwroot/node_modules
+
+*.pem
+*.key
 
 # End of https://www.toptal.com/developers/gitignore/api/dotnetcore
 

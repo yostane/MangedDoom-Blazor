@@ -86,7 +86,7 @@ namespace AudioSynthesis.Bank
                     break;
                 case ".sf2":
                     bankName = "SoundFont";
-                    LoadSf2(CrossPlatformHelper.OpenResource(bankFile));
+                    LoadSf2(ManagedDoom.DoomApplication.SoundFontStream);
                     break;
             }
             assets.PatchAssetList.TrimExcess();
@@ -127,7 +127,7 @@ namespace AudioSynthesis.Bank
         }
         public Patch[] GetBank(int bankNumber)
         {
-            if(bank.ContainsKey(bankNumber))
+            if (bank.ContainsKey(bankNumber))
                 return bank[bankNumber];
             return null;
         }
@@ -191,9 +191,9 @@ namespace AudioSynthesis.Bank
                 //read riff chunk
                 string id = IOHelper.Read8BitString(reader, 4).ToLower();
                 int size = reader.ReadInt32();
-                if(!id.Equals("riff"))
+                if (!id.Equals("riff"))
                     throw new InvalidDataException("Invalid bank file. The riff header is missing.");
-                if(!new RiffTypeChunk(id, size, reader).TypeId.ToLower().Equals("bank"))
+                if (!new RiffTypeChunk(id, size, reader).TypeId.ToLower().Equals("bank"))
                     throw new InvalidDataException("Invalid bank file. The riff type is incorrect.");
                 //read info chunk
                 id = IOHelper.Read8BitString(reader, 4).ToLower();
@@ -213,7 +213,7 @@ namespace AudioSynthesis.Bank
                 if (!id.Equals("aset"))
                     throw new InvalidDataException("Invalid bank file. The LIST chunk is not of type ASET.");
                 //--read assets
-                while(reader.BaseStream.Position < readTo)
+                while (reader.BaseStream.Position < readTo)
                 {
                     id = IOHelper.Read8BitString(reader, 4).ToLower();
                     size = reader.ReadInt32();
@@ -327,7 +327,7 @@ namespace AudioSynthesis.Bank
                             presetLoVel = (byte)((p.Zones[i].Generators[0].AmountInt16 >> 8) & 0xFF);
                         }
                     }
-                    if(p.Zones[i].Generators[p.Zones[i].Generators.Length - 1].GeneratorType == GeneratorEnum.Instrument)
+                    if (p.Zones[i].Generators[p.Zones[i].Generators.Length - 1].GeneratorType == GeneratorEnum.Instrument)
                     {
                         Sf2Region[] insts = inst[p.Zones[i].Generators[p.Zones[i].Generators.Length - 1].AmountInt16];
                         for (int x = 0; x < insts.Length; x++)
@@ -488,7 +488,7 @@ namespace AudioSynthesis.Bank
                 startRange = endRange;
                 endRange = range;
             }
-            if(startRange < 0 || startRange >= BankSize)
+            if (startRange < 0 || startRange >= BankSize)
                 throw new ArgumentOutOfRangeException("startRange");
             if (endRange < 0 || endRange >= BankSize)
                 throw new ArgumentOutOfRangeException("endRange");
@@ -506,7 +506,7 @@ namespace AudioSynthesis.Bank
             for (int x = startRange; x <= endRange; x++)
                 patches[x] = patch;
         }
-        
+
         private static string ReadNextLine(StreamReader reader)
         {
             while (!reader.EndOfStream)

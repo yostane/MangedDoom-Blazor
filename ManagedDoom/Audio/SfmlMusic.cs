@@ -115,6 +115,11 @@ namespace ManagedDoom.Audio
             }
         }
 
+        public void CustomAdvanceFrame()
+        {
+            this.stream.OnGetData(out short[] samples);
+        }
+
         public int MaxVolume
         {
             get
@@ -162,11 +167,11 @@ namespace ManagedDoom.Audio
 
                 config.audio_musicvolume = Math.Clamp(config.audio_musicvolume, 0, parent.MaxVolume);
 
-                synthesizer = new Synthesizer(MusDecoder.SampleRate, 2, MusDecoder.BufferLength, 1);
+                synthesizer = new Synthesizer(MusDecoder.SampleRate, 1, MusDecoder.BufferLength, 1);
                 synthesizer.LoadBank(sfPath);
                 synthBufferLength = synthesizer.sampleBuffer.Length;
 
-                var synthBufferDuration = (double)(synthBufferLength / 2) / MusDecoder.SampleRate;
+                var synthBufferDuration = (double)(synthBufferLength / 1) / MusDecoder.SampleRate;
                 stepCount = (int)Math.Ceiling(0.02 / synthBufferDuration);
                 batchLength = synthBufferLength * stepCount;
                 batch = new short[batchLength];
@@ -174,8 +179,10 @@ namespace ManagedDoom.Audio
                 Initialize(2, (uint)MusDecoder.SampleRate);
             }
 
-            private void Initialize(int v, uint sampleRate)
+            private void Initialize(int channels, uint sampleRate)
             {
+                //https://hackage.haskell.org/package/SFML-2.3.2.4/docs/SFML-Audio-SoundStream.html
+                // channels 1 mono, 2 stereo
                 // TODO: implement
             }
 
@@ -191,10 +198,10 @@ namespace ManagedDoom.Audio
 
             private void Play()
             {
-                // TODO: implement
+
             }
 
-            protected bool OnGetData(out short[] samples)
+            public bool OnGetData(out short[] samples)
             {
                 if (reserved != current)
                 {
@@ -233,6 +240,8 @@ namespace ManagedDoom.Audio
                 }
 
                 samples = batch;
+                int[] intSamples = Array.ConvertAll(batch, Convert.ToInt32);
+                BlazorDoom.Renderer.playMusicOnJS(intSamples, MusDecoder.SampleRate, 0);
 
                 return true;
             }

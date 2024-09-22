@@ -19,9 +19,9 @@ using System;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Microsoft.JSInterop;
 using SFML.Graphics;
 using SFML.System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ManagedDoom.SoftwareRendering
 {
@@ -50,7 +50,8 @@ namespace ManagedDoom.SoftwareRendering
         private int sfmlWindowWidth;
         private int sfmlWindowHeight;
 
-        private DrawScreen screen;
+        public DrawScreen screen;
+        public uint[] CurrentColors { get; private set; }
 
         private int sfmlTextureWidth;
         private int sfmlTextureHeight;
@@ -241,7 +242,7 @@ namespace ManagedDoom.SoftwareRendering
             //Console.WriteLine("Render state {0}, {1} ms", game.State, watch.ElapsedMilliseconds);
         }
 
-        public void Render(DoomApplication app)
+        public uint[] Render(DoomApplication app)
         {
             //var watch = System.Diagnostics.Stopwatch.StartNew();
             RenderApplication(app);
@@ -270,6 +271,8 @@ namespace ManagedDoom.SoftwareRendering
             }
 
             Display(colors);
+            this.CurrentColors = colors;
+            return colors;
         }
 
         public void RenderWipe(DoomApplication app, WipeEffect wipe)
@@ -321,8 +324,9 @@ namespace ManagedDoom.SoftwareRendering
         {
             // var watch = System.Diagnostics.Stopwatch.StartNew();
             var args = new object[] { screen.Data, colors, 320, 200 };
-            //Console.WriteLine("Screen data: " + BitConverter.ToString(screen.Data));
-            DoomApplication.WebAssemblyJSRuntime.InvokeUnmarshalled<byte[], uint[], int>("renderWithColorsAndScreenDataUnmarshalled", screen.Data, colors);
+            //Console.WriteLine($"Colors : {String.Join(",", colors)}.\nScreen data: {BitConverter.ToString(screen.Data)}.");
+            BlazorDoom.Renderer.renderOnJS(screen.Data, (int[])((object)colors));
+            //DoomApplication.WebAssemblyJSRuntime.InvokeUnmarshalled<byte[], uint[], int>("renderWithColorsAndScreenDataUnmarshalled", screen.Data, colors);
             //Console.WriteLine("JS renderWithColorsAndScreenDataUnmarshalled: {0} s", watch.ElapsedMilliseconds);
             // watch.Restart();
 

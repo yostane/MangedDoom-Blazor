@@ -20,12 +20,10 @@ namespace SFML.Audio
             // TODO: implement
         }
 
-        internal void Play()
+        internal void Play(int channel = 0)
         {
-            var audioData = new object[] { SoundBuffer.samples, SoundBuffer.sampleRate, 0, Position };
-            DoomApplication.WebAssemblyJSRuntime.Invoke<object>(
-                "playSound", audioData);
-
+            int[] samples = Array.ConvertAll(SoundBuffer.samples, Convert.ToInt32);
+            BlazorDoom.Renderer.playSoundOnJS(samples, (int)SoundBuffer.sampleRate, channel);
         }
 
         public override string ToString()

@@ -1,4 +1,4 @@
-# Manager doom Blazor
+# Managed doom Blazor
 
 ![Logo](./media/logo.jpg)
 
@@ -27,3 +27,32 @@ dotnet run --pathbase=/MangedDoom-Blazor
 - Implement mouse controls
 - Implement save and load
 - Fix bugs
+
+## Common issues
+
+```sh
+❯ dotnet restore
+MSBUILD : error MSB1025: An internal failure occurred while running MSBuild.
+System.Globalization.CultureNotFoundException: Only the invariant culture is supported in globalization-invariant mode. See https://aka.ms/GlobalizationInvariantMode for more information. (Parameter 'name')
+en-US is an invalid culture identifier.
+   at System.Globalization.CultureInfo..ctor(String name, Boolean useUserOverride)
+   at Microsoft.Build.CommandLine.MSBuildApp.SetConsoleUI()
+   at Microsoft.Build.CommandLine.MSBuildApp.Execute(String[] commandLine)
+Unhandled exception: System.Globalization.CultureNotFoundException: Only the invariant culture is supported in globalization-invariant mode. See https://aka.ms/GlobalizationInvariantMode for more information. (Parameter 'name')
+en-US is an invalid culture identifier.
+   at System.Globalization.CultureInfo..ctor(String name, Boolean useUserOverride)
+   at Microsoft.Build.CommandLine.MSBuildApp.SetConsoleUI()
+   at Microsoft.Build.CommandLine.MSBuildApp.Execute(String[] commandLine)
+   at Microsoft.Build.CommandLine.MSBuildApp.Main(String[] args)
+   at Microsoft.DotNet.Cli.Utils.MSBuildForwardingAppWithoutLogging.ExecuteInProc(String[] arguments)
+```
+
+## Userful scripts
+
+```pwsh
+# List all relative files (for pwa)
+Get-ChildItem -Recurse  -File -Name | % { '"./' + ($_ -replace '[\\/]', '/') + '",' }
+Get-ChildItem -Recurse  -File -Name -Exclude *.br,*.gz  | % { '"./' + ($_ -replace '[\\/]', '/') + '",' }
+
+dotnet tool install --global dotnet-serve
+```

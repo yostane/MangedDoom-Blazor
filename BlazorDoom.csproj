@@ -1,15 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly" ToolsVersion="Current">
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <ExcludeFoldersFromDeployment>docs</ExcludeFoldersFromDeployment>
-        <RunAOTCompilation>true</RunAOTCompilation>
+        <TargetFramework>net9.0</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Nullable>enable</Nullable>
+        <WarningLevel>0</WarningLevel>
     </PropertyGroup>
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.*-*" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.*-*" PrivateAssets="all" />
-        <PackageReference Include="System.Net.Http.Json" Version="7.*-*" />
-    </ItemGroup>
-    <ItemGroup>
-        <Content Remove="docs\**" CopyToPublishDirectory="Never" />
-    </ItemGroup>
 </Project>
