@@ -4,101 +4,123 @@
  * @param {number[]} colors: unit array
  */
 export function renderWithColorsAndScreenDataUnmarshalled(screenData, colors) {
-    const width = 320;
-    const height = 200;
-    const canvas = document.getElementById("canvas");
-    var context = canvas.getContext("2d");
-    context.imageSmoothingEnabled = false;
-    // TODO: create only two imageData and reuse them
-    const imageData = context.createImageData(width, height);
-    let y = 0;
-    let x = 0;
-    for (let i = 0; i < screenData.length; i += 1) {
-        const dataIndex = (y * width + x) * 4;
-        setSinglePixel(imageData, dataIndex, colors, screenData[i]);
-        if (y >= height - 1) {
-            y = 0;
-            x += 1;
-        } else {
-            y += 1;
-        }
+  const width = 320;
+  const height = 200;
+  const canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
+  context.imageSmoothingEnabled = false;
+  // TODO: create only two imageData and reuse them
+  const imageData = context.createImageData(width, height);
+  let y = 0;
+  let x = 0;
+  for (let i = 0; i < screenData.length; i += 1) {
+    const dataIndex = (y * width + x) * 4;
+    setSinglePixel(imageData, dataIndex, colors, screenData[i]);
+    if (y >= height - 1) {
+      y = 0;
+      x += 1;
+    } else {
+      y += 1;
     }
-    context.putImageData(imageData, 0, 0);
+  }
+  context.putImageData(imageData, 0, 0);
 }
 
 function setSinglePixel(imageData, dataIndex, colors, colorIndex) {
-    const color = colors[colorIndex];
-    imageData.data[dataIndex] = color & 0xff;
-    imageData.data[dataIndex + 1] = (color >> 8) & 0xff;
-    imageData.data[dataIndex + 2] = (color >> 16) & 0xff;
-    imageData.data[dataIndex + 3] = 255;
+  const color = colors[colorIndex];
+  imageData.data[dataIndex] = color & 0xff;
+  imageData.data[dataIndex + 1] = (color >> 8) & 0xff;
+  imageData.data[dataIndex + 2] = (color >> 16) & 0xff;
+  imageData.data[dataIndex + 3] = 255;
 }
 
-let audioContext;
-const numberOfChannels = 8;
+class AudioManager {
+  /**
+   * @type {AudioBuffer[]}
+   */
+  static buffers = [];
+
+  /**
+   * @type {AudioContext}
+   */
+  static #audioContext;
+  /**
+   *
+   * @returns {AudioContext}
+   */
+  static getAudioContext() {
+    const numberOfChannels = 9;
+    if (!this.#audioContext) {
+      try {
+        this.#audioContext = new AudioContext({
+          numberOfChannels: numberOfChannels,
+        });
+      } catch (e) {
+        // console.error(e);
+        return;
+      }
+    }
+    this.buffers.push(this.#audioContext.createBuffer(1, 90_000, 44100));
+    for (let index = 1; index < numberOfChannels; index++) {
+      this.buffers.push(this.#audioContext.createBuffer(1, 90_000, 22050));
+    }
+    return this.#audioContext;
+  }
+}
+
 let soundSource;
 export function playSound(samples, sampleRate, channel) {
-    if (!audioContext) {
-        console.log("creating audio context", numberOfChannels, sampleRate);
-        audioContext = new AudioContext({
-            numberOfChannels: numberOfChannels,
-        });
-    }
+  const audioContext = AudioManager.getAudioContext();
+  if (!audioContext) {
+    return;
+  }
 
-    const audioBuffer = audioContext.createBuffer(
-        numberOfChannels,
-        samples.length,
-        sampleRate
-    );
+  // console.log("sound", channel, samples.length, sampleRate);
+  const audioBuffer = audioContext.createBuffer(1, samples.length, sampleRate);
 
-    var channelData = audioBuffer.getChannelData(channel);
-    for (let i = 0; i < samples.length; i++) {
-        // normalize the sample to be between -1 and 1
-        channelData[i] = samples[i] / 32767;
-    }
+  var channelData = audioBuffer.getChannelData(0);
+  for (let i = 0; i < samples.length; i++) {
+    // normalize the sample to be between -1 and 1
+    channelData[i] = samples[i] / 32767;
+  }
 
-    // if (soundSource) {
-    //     soundSource.stop();
-    // }
+  // if (soundSource) {
+  //     soundSource.stop();
+  // }
 
-    soundSource = audioContext.createBufferSource();
-    soundSource.buffer = audioBuffer;
-    soundSource.connect(audioContext.destination);
-    soundSource.start();
+  soundSource = audioContext.createBufferSource();
+  soundSource.buffer = audioBuffer;
+  soundSource.connect(audioContext.destination);
+  soundSource.start();
 }
 
 // Todo: play music in bigger and sync the playback
 let source;
 let musicChannelData;
 let musicBuffer;
+/**
+ *
+ * @param {int[]} samples
+ * @param {int} sampleRate
+ * @param {int} channel
+ * @returns
+ */
 export function playMusic(samples, sampleRate, channel) {
-    if (!audioContext) {
-        try {
-            audioContext = new AudioContext({
-                numberOfChannels: numberOfChannels,
-            });
-        } catch (e) {
-            console.error(e);
-            return;
-        }
-    }
+  const audioContext = AudioManager.getAudioContext();
+  if (!audioContext) {
+    return;
+  }
 
-    if (!musicBuffer) {
-        musicBuffer = audioContext.createBuffer(1, samples.length, sampleRate);
-        musicChannelData = musicBuffer.getChannelData(0);
-    }
+  // console.log("music", channel, samples.length, sampleRate);
+  const musicBuffer = AudioManager.buffers[0];
+  musicChannelData = musicBuffer.getChannelData(0);
+  for (let i = 0; i < samples.length; i++) {
+    // noralize the sample to be between -1 and 1
+    musicChannelData[i] = samples[i] / 32767;
+  }
 
-    if (source) {
-        source.stop();
-    }
-    source = audioContext.createBufferSource();
-    source.buffer = musicBuffer;
-    source.connect(audioContext.destination);
-
-    for (let i = 0; i < samples.length; i++) {
-        // noralize the sample to be between -1 and 1
-        musicChannelData[i] = samples[i] / 32767;
-    }
-
-    source.start();
+  const source = audioContext.createBufferSource();
+  source.buffer = musicBuffer;
+  source.connect(audioContext.destination);
+  source.start(audioContext.currentTime + 0.1);
 }

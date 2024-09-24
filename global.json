@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "start": "dotnet publish -c Release && dotnet serve -d:bin/Release/net9.0/publish/wwwroot -p 8080 -S --path-base '/MangedDoom-Blazor'"
+  }
+}
