@@ -1,31 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <base href="/MangedDoom-Blazor/" />
-    <meta charset="utf-8" />
 
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <meta
-      name="description"
-      content="BlazorDoom - A dotnet WASM port of ManagedDoom"
-    />
-    <meta name="keywords" content="Blazor, Doom, Game, WebAssembly, WASM" />
-    <title>BlazorDoom</title>
-    <link href="./bootstrap.min.css" rel="stylesheet" />
-    <link href="./app.css" rel="stylesheet" />
-    <link rel="manifest" href="./manifest.json" />
-    <script type="module" src="./main.js"></script>
-  </head>
+<head>
+  <base href="/MangedDoom-Blazor/" />
+  <meta charset="utf-8" />
 
-  <body>
-    <div id="install_button"></div>
-    <div id="fps"></div>
-    <canvas id="canvas" width="320" height="200"></canvas>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="BlazorDoom - A dotnet WASM port of ManagedDoom" />
+  <meta name="keywords" content="Blazor, Doom, Game, WebAssembly, WASM" />
+  <title>BlazorDoom</title>
+  <link href="./bootstrap.min.css" rel="stylesheet" />
+  <link href="./app.css" rel="stylesheet" />
+  <link rel="manifest" href="./manifest.json" />
+  <script type="module" src="./main.js"></script>
+  <script>
+    import { loadWad } from './main.js';
+  </script>
+</head>
+
+<body>
+  <div id="install_button"></div>
+  <div id="config_buttons">
     <button onclick="console.log('clicked sound button');">
       Click to enable sound APIs
     </button>
-  </body>
+    <select name="wad_selection" id="wad_selection">
+      <option value="doom1">Doom 1 shareware</option>
+      <option value="freedoom1">FreeDoom 1</option>
+      <option value="freedoom2">FreeDoom 2</option>
+    </select>
+    <button id="load_wad">Load WAD</button>
+  </div>
+  <div id="fps"></div>
+  <canvas id="canvas" width="320" height="200"></canvas>
+</body>
+
 </html>

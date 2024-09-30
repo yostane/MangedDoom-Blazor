@@ -112,7 +112,7 @@ export function playMusic(samples, sampleRate, channel) {
   }
 
   // console.log("music", channel, samples.length, sampleRate);
-  const musicBuffer = AudioManager.buffers[0];
+  const musicBuffer = audioContext.createBuffer(1, samples.length, sampleRate);
   musicChannelData = musicBuffer.getChannelData(0);
   for (let i = 0; i < samples.length; i++) {
     // noralize the sample to be between -1 and 1
@@ -122,5 +122,5 @@ export function playMusic(samples, sampleRate, channel) {
   const source = audioContext.createBufferSource();
   source.buffer = musicBuffer;
   source.connect(audioContext.destination);
-  source.start(audioContext.currentTime + 0.1);
+  source.start();
 }
