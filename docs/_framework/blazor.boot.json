@@ -1,9 +1,9 @@
 {
   "mainAssemblyName": "BlazorDoom",
   "resources": {
-    "hash": "sha256-1VGtPI0W/N5DreIt5iFAzU3eC/J+x/riuR6RVCNoZoI=",
+    "hash": "sha256-+EbBBE5wAHotec5m+cTUdQ7bMWmXXmGaA+HfHPAk8oU=",
     "fingerprinting": {
-      "BlazorDoom.0b36k4yma3.wasm": "BlazorDoom.wasm",
+      "BlazorDoom.wrs9wdw20l.wasm": "BlazorDoom.wasm",
       "System.Collections.cw1uh27c1t.wasm": "System.Collections.wasm",
       "System.Console.2fw1u0u75z.wasm": "System.Console.wasm",
       "System.Diagnostics.DiagnosticSource.yhknl5dwgf.wasm": "System.Diagnostics.DiagnosticSource.wasm",
@@ -40,7 +40,7 @@
       "System.Runtime.InteropServices.JavaScript.dbvat1dvl9.wasm": "sha256-CS7QdAuCluxbd8pFwuTF//rPxf7N2R66v7FfdyGzEYE="
     },
     "assembly": {
-      "BlazorDoom.0b36k4yma3.wasm": "sha256-PBpvrdDtH0M+6MDWotvMYnWai+EXCYLloeuU1Q67suA=",
+      "BlazorDoom.wrs9wdw20l.wasm": "sha256-FBKI5SVFUMOFnDtHBrkVunXti/UXkQkaKhJx3/LFR2A=",
       "System.Collections.cw1uh27c1t.wasm": "sha256-HM5n/GsK4XtBupaFWEhvHmmcKSD9V1TN8ogqOEVMVSA=",
       "System.Console.2fw1u0u75z.wasm": "sha256-Xtgq19JutXceFCuaR7XRiNW9hFsqm+LS3p8STp8iJGY=",
       "System.Diagnostics.DiagnosticSource.yhknl5dwgf.wasm": "sha256-ev8HKh2i47bk7zB71AI9H/XEkMa1nNlV0qGOCssuUes=",

@@ -1,75 +1,39 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <base href="/MangedDoom-Blazor/" />
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-        <title>BlazorDoom</title>
-        <link href="./bootstrap.min.css" rel="stylesheet" />
-        <link href="./app.css" rel="stylesheet" />
-        <link rel="manifest" href="./manifest.json" />
+<html lang="en">
 
-        <script>
-            const upKeys = [];
-            const downKeys = [];
+<head>
+  <base href="/MangedDoom-Blazor/" />
+  <meta charset="utf-8" />
 
-            window.addEventListener("DOMContentLoaded", () => {
-                document.body.addEventListener("keydown", function (e) {
-                    if (e.target.tagName === "INPUT") {
-                        return true;
-                    }
-                    const index = downKeys.indexOf(e.keyCode);
-                    if (index < 0) {
-                        downKeys.push(e.keyCode);
-                    }
-                    e.preventDefault();
-                    return false;
-                });
-                document.body.addEventListener("keyup", function (e) {
-                    if (e.target.tagName === "INPUT") {
-                        return true;
-                    }
-                    const index = downKeys.indexOf(e.keyCode);
-                    if (index > -1) {
-                        downKeys.splice(index, 1);
-                    }
-                    upKeys.push(e.keyCode);
-                    e.preventDefault();
-                    return false;
-                });
-            });
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="BlazorDoom - A dotnet WASM port of ManagedDoom" />
+  <meta name="keywords" content="Blazor, Doom, Game, WebAssembly, WASM" />
+  <title>BlazorDoom</title>
+  <link href="./bootstrap.min.css" rel="stylesheet" />
+  <link href="./app.css" rel="stylesheet" />
+  <link rel="manifest" href="./manifest.json" />
+  <script type="module" src="./main.js"></script>
+  <script>
+    import { loadWad } from './main.js';
+  </script>
+</head>
 
-            if ("serviceWorker" in navigator) {
-                navigator.serviceWorker
-                    .register("./service-worker.js")
-                    .then((registration) => {
-                        console.log("Service Worker registered:", registration);
-                    })
-                    .catch((error) => {
-                        console.error(
-                            "Service Worker registration failed:",
-                            error
-                        );
-                    });
-            }
-        </script>
-        <script type="module" src="./main.js"></script>
-    </head>
+<body>
+  <div id="install_button"></div>
+  <div id="config_buttons">
+    <button onclick="console.log('clicked sound button');">
+      Click to enable sound APIs
+    </button>
+    <select name="wad_selection" id="wad_selection">
+      <option value="doom1">Doom 1 shareware</option>
+      <option value="freedoom1">FreeDoom 1</option>
+      <option value="freedoom2">FreeDoom 2</option>
+    </select>
+    <button id="load_wad">Load WAD</button>
+    <button id="toggle_fps">Toggle max FPS</button>
+  </div>
+  <div id="fps"></div>
+  <canvas id="canvas" width="320" height="200"></canvas>
+</body>
 
-    <body>
-        <div id="install_button" style="visibility: hidden"></div>
-        <div id="fps"></div>
-        <canvas
-            id="canvas"
-            width="320"
-            height="200"
-            style="width: 80%; height: auto; image-rendering: pixelated"
-        ></canvas>
-        <button onclick="console.log('clicked sound button');">
-            Click to enable sound APIs
-        </button>
-    </body>
 </html>
