@@ -46,7 +46,12 @@ if ("serviceWorker" in navigator) {
 
 // frameTime = 33 or 16
 // 60 fps -> 1 frame in 16.66 ms
-const frameTime = 33;
+let frameTime = 33;
+
+document.getElementById("toggle_fps").addEventListener("click", () => {
+  frameTime = frameTime === 16 ? 33 : 16;
+});
+
 let lastFrameTimestamp = -frameTime;
 const fpsElement = document.getElementById("fps");
 const fpsSmoothing = 0.9;
@@ -83,9 +88,9 @@ document.body.addEventListener("keydown", function (e) {
   if (e.target.tagName === "INPUT") {
     return true;
   }
-  const index = downKeys.indexOf(e.key);
+  const index = downKeys.indexOf(e.keyCode);
   if (index < 0) {
-    downKeys.push(e.key);
+    downKeys.push(e.keyCode);
   }
   e.preventDefault();
   return false;
@@ -94,11 +99,11 @@ document.body.addEventListener("keyup", function (e) {
   if (e.target.tagName === "INPUT") {
     return true;
   }
-  const index = downKeys.indexOf(e.key);
+  const index = downKeys.indexOf(e.keyCode);
   if (index > -1) {
     downKeys.splice(index, 1);
   }
-  upKeys.push(e.key);
+  upKeys.push(e.keyCode);
   e.preventDefault();
   return false;
 });
