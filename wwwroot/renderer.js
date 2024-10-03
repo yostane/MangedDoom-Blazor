@@ -36,14 +36,21 @@ function setSinglePixel(imageData, dataIndex, colors, colorIndex) {
 
 class AudioManager {
   /**
-   * @type {AudioBuffer[]}
+   * @type {AudioBuffer}
    */
-  static buffers = [];
+  static #musicBuffer;
+  static #currentMusicBufferIndex = 0;
+  /**
+   * @type {Float32Array}
+   */
+  static #currentChannelData;
 
   /**
    * @type {AudioContext}
    */
   static #audioContext;
+  static expectedBufferEndTime = 0;
+  static musicSampleRate = 44100;
   /**
    *
    * @returns {AudioContext}
@@ -55,16 +62,44 @@ class AudioManager {
         this.#audioContext = new AudioContext({
           numberOfChannels: numberOfChannels,
         });
+        this.#createMusicBuffer();
       } catch (e) {
         // console.error(e);
         return;
       }
     }
-    this.buffers.push(this.#audioContext.createBuffer(1, 90_000, 44100));
-    for (let index = 1; index < numberOfChannels; index++) {
-      this.buffers.push(this.#audioContext.createBuffer(1, 90_000, 22050));
-    }
     return this.#audioContext;
+  }
+
+  static #createMusicBuffer() {
+    this.#musicBuffer = this.#audioContext.createBuffer(1, 44100, this.musicSampleRate);
+    this.#currentMusicBufferIndex = 0;
+    this.#currentChannelData = this.#musicBuffer.getChannelData(0);
+  }
+
+  /**
+ * @param {int[]} samples
+ * @param {int} sampleRate
+ */
+  static playMusic(samples) {
+    if (!this.getAudioContext()) {
+      return;
+    }
+    if (this.#currentMusicBufferIndex >= this.#musicBuffer.length) {
+      const currentTime = this.#audioContext.currentTime;
+      const source = this.#audioContext.createBufferSource();
+      source.buffer = this.#musicBuffer;
+      source.connect(this.#audioContext.destination);
+      const duration = this.#currentMusicBufferIndex / this.musicSampleRate;
+      source.start(this.expectedBufferEndTime, 0, duration);
+      this.expectedBufferEndTime = currentTime + duration;
+      this.#createMusicBuffer();
+    }
+    for (let i = 0; i < samples.length; i++) {
+      // normalize the sample between -1 and 1
+      this.#currentChannelData[this.#currentMusicBufferIndex + i] = samples[i] / 32767;
+    }
+    this.#currentMusicBufferIndex += samples.length;
   }
 }
 
@@ -74,8 +109,6 @@ export function playSound(samples, sampleRate, channel) {
   if (!audioContext) {
     return;
   }
-
-  // console.log("sound", channel, samples.length, sampleRate);
   const audioBuffer = audioContext.createBuffer(1, samples.length, sampleRate);
 
   var channelData = audioBuffer.getChannelData(0);
@@ -84,20 +117,12 @@ export function playSound(samples, sampleRate, channel) {
     channelData[i] = samples[i] / 32767;
   }
 
-  // if (soundSource) {
-  //     soundSource.stop();
-  // }
-
   soundSource = audioContext.createBufferSource();
   soundSource.buffer = audioBuffer;
   soundSource.connect(audioContext.destination);
   soundSource.start();
 }
 
-// Todo: play music in bigger and sync the playback
-let source;
-let musicChannelData;
-let musicBuffer;
 /**
  *
  * @param {int[]} samples
@@ -106,21 +131,5 @@ let musicBuffer;
  * @returns
  */
 export function playMusic(samples, sampleRate, channel) {
-  const audioContext = AudioManager.getAudioContext();
-  if (!audioContext) {
-    return;
-  }
-
-  // console.log("music", channel, samples.length, sampleRate);
-  const musicBuffer = audioContext.createBuffer(1, samples.length, sampleRate);
-  musicChannelData = musicBuffer.getChannelData(0);
-  for (let i = 0; i < samples.length; i++) {
-    // noralize the sample to be between -1 and 1
-    musicChannelData[i] = samples[i] / 32767;
-  }
-
-  const source = audioContext.createBufferSource();
-  source.buffer = musicBuffer;
-  source.connect(audioContext.destination);
-  source.start();
+  AudioManager.playMusic(samples);
 }
