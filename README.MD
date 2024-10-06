@@ -8,7 +8,6 @@ You can try it here: [demo](https://yostane.github.io/MangedDoom-Blazor/)
 
 ## Running the webapp locally
 
-
 ```sh
 #prerequisites
 dotnet workload install wasm-tools wasm-experimental
@@ -35,3 +34,7 @@ Get-ChildItem -Recurse  -File -Name -Exclude *.br,*.gz  | % { '"./' + ($_ -repla
 
 dotnet tool install --global dotnet-serve
 ```
+
+## Credits
+
+- [html5-virtual-game-controller](https://github.com/austinhallock/html5-virtual-game-controller)

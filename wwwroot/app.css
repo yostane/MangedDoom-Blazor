@@ -2,35 +2,35 @@
 
 html,
 body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #install_button {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 a,
 .btn-link {
-    color: #0366d6;
+  color: #0366d6;
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
 }
 
 #fps {
-    position: fixed;
-    left: 0;
-    top: 0;
-    display: inline-block;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
 }
 
 #canvas {
-    width: 80%;
-    height: auto;
-    image-rendering: pixelated;
+  width: 80%;
+  height: auto;
+  image-rendering: pixelated;
 }
