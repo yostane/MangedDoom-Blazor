@@ -21,20 +21,28 @@
   </head>
 
   <body>
-    <div id="install_button"></div>
-    <div id="config_buttons">
-      <button onclick="console.log('clicked sound button');">
-        Click to enable sound APIs
-      </button>
-      <select name="wad_selection" id="wad_selection">
-        <option value="doom1">Doom 1 shareware</option>
-        <option value="freedoom1">FreeDoom 1</option>
-        <option value="freedoom2">FreeDoom 2</option>
-      </select>
-      <button id="load_wad">Load WAD</button>
-      <button id="toggle_fps">Toggle max FPS</button>
-    </div>
     <div id="fps"></div>
+    <div id="config_buttons">
+      <div id="install_button"></div>
+      <div>
+        <button onclick="console.log('clicked sound button');">
+          Tap Sound
+        </button>
+      </div>
+      <div>
+        <select name="wad_selection" id="wad_selection">
+          <option value="doom1">Doom 1 shareware</option>
+          <option value="freedoom1">FreeDoom 1</option>
+          <option value="freedoom2">FreeDoom 2</option>
+        </select>
+      </div>
+      <div>
+        <button id="load_wad">Load WAD</button>
+      </div>
+      <div>
+        <button id="toggle_fps">Toggle max FPS</button>
+      </div>
+    </div>
     <canvas id="canvas" width="320" height="200"></canvas>
   </body>
 </html>

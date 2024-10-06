@@ -47,9 +47,11 @@ if ("serviceWorker" in navigator) {
 // 60 fps -> 1 frame in 16.66 ms
 let frameTime = 33;
 
-document.getElementById("toggle_fps").addEventListener("click", () => {
+function toggleFps() {
   frameTime = frameTime === 16 ? 33 : 16;
-});
+}
+
+document.getElementById("toggle_fps").addEventListener("click", toggleFps);
 
 let lastFrameTimestamp = -frameTime;
 const fpsElement = document.getElementById("fps");

@@ -27,6 +27,7 @@ function precache() {
       "./_framework/BlazorDoom.0cyz6ga7f3.wasm",
       "./_framework/BlazorDoom.bobb410r6y.wasm",
       "./_framework/BlazorDoom.ghw74p3rvl.wasm",
+      "./_framework/BlazorDoom.meebds0rcu.wasm",
       "./_framework/dotnet.js",
       "./_framework/dotnet.native.e5012p0r9i.wasm",
       "./_framework/dotnet.native.qrck6hnk55.js",

@@ -5,9 +5,17 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+#config_buttons {
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  left: auto;
+  top: 0;
+}
+
 div,
 button {
-  z-index: 1;
+  text-align: right;
 }
 
 #install_button {
