@@ -5,6 +5,11 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+div,
+button {
+  z-index: 1;
+}
+
 #install_button {
   visibility: hidden;
 }
@@ -30,7 +35,13 @@ a,
 }
 
 #canvas {
-  width: 80%;
-  height: auto;
+  z-index: -1;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  width: auto;
+  height: 100vh;
   image-rendering: pixelated;
 }

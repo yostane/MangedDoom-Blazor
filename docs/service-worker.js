@@ -24,6 +24,7 @@ function precache() {
       "./renderer.js",
       "./service-worker.js",
       "./_framework/blazor.boot.json",
+      "./_framework/BlazorDoom.0cyz6ga7f3.wasm",
       "./_framework/BlazorDoom.bobb410r6y.wasm",
       "./_framework/BlazorDoom.ghw74p3rvl.wasm",
       "./_framework/dotnet.js",
