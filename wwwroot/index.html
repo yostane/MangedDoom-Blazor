@@ -1,48 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <base href="/MangedDoom-Blazor/" />
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <meta
-      name="description"
-      content="BlazorDoom - A dotnet WASM port of ManagedDoom"
-    />
-    <meta name="keywords" content="Blazor, Doom, Game, WebAssembly, WASM" />
-    <title>BlazorDoom</title>
-    <link href="./bootstrap.min.css" rel="stylesheet" />
-    <link href="./app.css" rel="stylesheet" />
-    <link rel="manifest" href="./manifest.json" />
-    <script type="text/javascript" src="./js/gamecontroller.js"></script>
-    <script type="module" src="./main.js"></script>
-  </head>
 
-  <body>
-    <div id="fps"></div>
-    <div id="config_buttons">
-      <div id="install_button"></div>
-      <div>
-        <button onclick="console.log('clicked sound button');">
-          Tap Sound
-        </button>
-      </div>
-      <div>
-        <select name="wad_selection" id="wad_selection">
-          <option value="doom1">Doom 1 shareware</option>
-          <option value="freedoom1">FreeDoom 1</option>
-          <option value="freedoom2">FreeDoom 2</option>
-        </select>
-      </div>
-      <div>
-        <button id="load_wad">Load WAD</button>
-      </div>
-      <div>
-        <button id="toggle_fps">Toggle max FPS</button>
-      </div>
+<head>
+  <base href="/MangedDoom-Blazor/" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="BlazorDoom - A dotnet WASM port of ManagedDoom" />
+  <meta name="keywords" content="Blazor, Doom, Game, WebAssembly, WASM" />
+  <title>BlazorDoom</title>
+  <link href="./bootstrap.min.css" rel="stylesheet" />
+  <link href="./app.css" rel="stylesheet" />
+  <link rel="manifest" href="./manifest.json" />
+  <script type="text/javascript" src="./js/gamecontroller.js"></script>
+  <script type="module" src="./main.js"></script>
+</head>
+
+<body>
+  <div id="fps"></div>
+  <div id="config_buttons">
+    <div id="install_button"></div>
+    <div>
+      <button onclick="console.log('clicked sound button');">
+        Tap Sound
+      </button>
     </div>
-    <canvas id="canvas" width="320" height="200"></canvas>
-  </body>
+    <div>
+      <select name="wad_selection" id="wad_selection">
+        <option value="doom1">Doom 1 shareware</option>
+        <option value="freedoom1">FreeDoom 1</option>
+        <option value="freedoom2">FreeDoom 2</option>
+      </select>
+    </div>
+    <div>
+      <select name="sf2_selection" id="sf2_selection">
+        <option value="TimGM6mb">TimGM6mb sf2</option>
+        <option value="Roland_SC-55">Roland 1</option>
+        <option value="Roland_SC-55_v2.2_by_Patch93_and_xan1242">Roland 2</option>
+        <option value="Roland_SC-55_v37">Roland 3</option>
+      </select>
+    </div>
+    <div>
+      <button id="load_wad">Load WAD and SF2</button>
+    </div>
+    <div>
+      <button id="toggle_fps">Toggle max FPS</button>
+    </div>
+  </div>
+  <canvas id="canvas" width="320" height="200"></canvas>
+</body>
+
 </html>

@@ -29,11 +29,11 @@ namespace BlazorDoom
     public static partial string getBaseUrl();
 
     [JSExport]
-    public static async Task LoadWad(string wadName = "doom1")
+    public static async Task LoadWad(string wadName = "doom1", string soundFont = "TimGM6mb")
     {
       Console.WriteLine("Loading assets");
       string wadUrl = $"{getBaseUrl()}wad/{wadName}.wad";
-      string soundFontUrl = $"{getBaseUrl()}wad/TimGM6mb.sf2";
+      string soundFontUrl = $"{getBaseUrl()}sf2/{soundFont}.sf2";
       // string soundFontUrl = "http://localhost:5000/Roland_SC-55_v3.7.sf2";
       string[] args = { };
       string[] configLines = { };

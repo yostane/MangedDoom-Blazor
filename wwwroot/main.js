@@ -25,7 +25,8 @@ const exports = await getAssemblyExports(getConfig().mainAssemblyName);
 
 document.getElementById("load_wad").addEventListener("click", () => {
   const choice = document.getElementById("wad_selection").value;
-  exports.BlazorDoom.MainJS.LoadWad(choice);
+  const soundFont = document.getElementById("sf2_selection").value;
+  exports.BlazorDoom.MainJS.LoadWad(choice, soundFont);
 });
 
 // run the C# Main() method and keep the runtime process running and executing further API calls
