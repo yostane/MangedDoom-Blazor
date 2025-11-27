@@ -73,32 +73,35 @@ class AudioManager {
   }
 
   static #createMusicBuffer() {
-    this.#musicBuffer = this.#audioContext.createBuffer(1, 44100, this.musicSampleRate);
+    this.#musicBuffer = this.#audioContext.createBuffer(
+      1,
+      44160,
+      this.musicSampleRate
+    );
     this.#currentMusicBufferIndex = 0;
     this.#currentChannelData = this.#musicBuffer.getChannelData(0);
   }
 
   /**
- * @param {int[]} samples
- * @param {int} sampleRate
- */
+   * @param {int[]} samples
+   * @param {int} sampleRate
+   */
   static playMusic(samples) {
     if (!this.getAudioContext()) {
       return;
     }
+
     if (this.#currentMusicBufferIndex >= this.#musicBuffer.length) {
-      const currentTime = this.#audioContext.currentTime;
       const source = this.#audioContext.createBufferSource();
       source.buffer = this.#musicBuffer;
       source.connect(this.#audioContext.destination);
-      const duration = this.#currentMusicBufferIndex / this.musicSampleRate;
-      source.start(this.expectedBufferEndTime, 0, duration);
-      this.expectedBufferEndTime = currentTime + duration;
+      source.start();
       this.#createMusicBuffer();
     }
     for (let i = 0; i < samples.length; i++) {
       // normalize the sample between -1 and 1
-      this.#currentChannelData[this.#currentMusicBufferIndex + i] = samples[i] / 32767;
+      this.#currentChannelData[this.#currentMusicBufferIndex + i] =
+        samples[i] / 32767;
     }
     this.#currentMusicBufferIndex += samples.length;
   }
